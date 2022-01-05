@@ -27,14 +27,7 @@ builder.Services.AddApplication();
 builder.Services.AddPersistans(configuration);
 builder.Services.AddControllers();
 
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
-    });
-});
+builder.Services.AddCors();
 
 builder.Services.AddAuthentication(config =>
 {
@@ -46,6 +39,7 @@ builder.Services.AddAuthentication(config =>
         options.Authority = "https://localhost:44313";
         options.Audience = "VerbumWepApi";
         options.RequireHttpsMetadata = false;
+
     });
 
 builder.Services.AddVersionedApiExplorer(options =>
@@ -58,6 +52,12 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+app.UseCors(x => x
+        .WithOrigins("http://localhost:8080")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
 
 app.UseSwagger();
 app.UseSwaggerUI(
@@ -74,19 +74,23 @@ app.UseSwaggerUI(
 //}
 );
 app.UseCustomExceptionHandler();
-app.UseRouting();
+
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
-app.UseAuthentication();
-app.UseAuthorization();
+
+
 app.UseApiVersioning();
+
+app.UseRouting();
+app.UseAuthorization();
+app.UseAuthentication();
 
 
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-    endpoints.MapHub<ChatHub>("/home/chat");
+    endpoints.MapHub<VerbumHub>("/verbum/hub");
+   
 });
 
 

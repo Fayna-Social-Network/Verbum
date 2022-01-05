@@ -8,7 +8,7 @@ namespace Verbum.Persistence
     public class VerbumDbContext :DbContext, IVerbumDbContext
     {
         public DbSet<Message> Messages { get; set; } = null!;
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<VerbumUser> Users { get; set; } = null!;
         public DbSet<UserContact> UserContacts { get; set; } = null!;
 
         public VerbumDbContext(DbContextOptions<VerbumDbContext> options)
