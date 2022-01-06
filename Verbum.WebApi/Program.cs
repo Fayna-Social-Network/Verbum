@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Verbum.Application;
 using Verbum.Application.Common.Mappings;
+using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
 using Verbum.Persistence;
 using Verbum.WebApi;
-using Verbum.WebApi.Hubs;
 using Verbum.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +24,9 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddApplication();
 builder.Services.AddPersistans(configuration);
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
 
 builder.Services.AddCors();
 

@@ -4,12 +4,13 @@ using Verbum.Domain;
 
 namespace Verbum.Persistence.EntityTypeConfigurations
 {
-    public class MessageConfiguration : IEntityTypeConfiguration<Message>
+    public class MessageConfiguration : IEntityTypeConfiguration<Messages>
     {
-        public void Configure(EntityTypeBuilder<Message> builder) {
+        public void Configure(EntityTypeBuilder<Messages> builder) {
             builder.HasOne<VerbumUser>(a => a.User)
                 .WithMany(d => d.Messages)
-                .HasForeignKey(d => d.UserId);
+                .HasForeignKey(d => d.UserId)
+                .HasForeignKey(d => d.Seller);
         }
 
     }

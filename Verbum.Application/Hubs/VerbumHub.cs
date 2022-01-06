@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Domain;
 
-namespace Verbum.WebApi.Hubs
+namespace Verbum.Application.Hubs
 {
-   
     public class VerbumHub :Hub
     {
         private readonly IVerbumDbContext _dbContext;
@@ -20,9 +18,11 @@ namespace Verbum.WebApi.Hubs
         }
 
 
-        public override async Task OnDisconnectedAsync(Exception? exception) {
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
             var user = await _dbContext.Users.SingleAsync(i => i.HubConnectionId == Context.ConnectionId);
-            if (user != null) {
+            if (user != null)
+            {
                 user.HubConnectionId = "";
                 user.IsOnline = false;
                 await _dbContext.SaveChangesAsync(CancellationToken.None);
@@ -33,22 +33,21 @@ namespace Verbum.WebApi.Hubs
 
 
 
-        public async Task SendMessage(Message message) =>
+        public async Task SendMessage(Messages message) =>
             await Clients.All.SendAsync("receiveMessage", message);
 
 
-        public async Task RegisterUserOnline(string NickName) {
-           var user = await _dbContext.Users.SingleAsync(i => i.NickName == NickName);
-            if (user != null) {
+        public async Task RegisterUserOnline(string NickName)
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == NickName);
+            if (user != null)
+            {
                 user.IsOnline = true;
                 user.HubConnectionId = Context.ConnectionId;
 
-               await _dbContext.SaveChangesAsync(CancellationToken.None);
+                await _dbContext.SaveChangesAsync(CancellationToken.None);
             }
 
         }
-
-       
-
     }
 }

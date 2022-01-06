@@ -5,9 +5,12 @@ namespace Verbum.Application.Interfaces
 {
     public interface IVerbumDbContext
     {
-        DbSet<Message> Messages { get; set; }
+        DbSet<Messages> Messages { get; set; }
         DbSet<VerbumUser> Users { get; set; }
         DbSet<UserContact> UserContacts { get; set; }
+        DbSet<UserBlackList> UserBlackLists { get; set; }
+        DbSet<MessageReaction> MessageReactions { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

@@ -19,7 +19,7 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                 .FindAsync(new object[] { request.Id }, cancellationToken);
 
             if (entity == null || entity.UserId != request.UserId) {
-                throw new NotFoundException(nameof(Message), request.Id);
+                throw new NotFoundException(nameof(Messages), request.Id);
             }
 
             _dbContext.Messages.Remove(entity);

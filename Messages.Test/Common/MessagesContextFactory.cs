@@ -20,13 +20,13 @@ namespace Messages.Test.Common
             var context = new VerbumDbContext(options);
             context.Database.EnsureCreated();
             context.Messages.AddRange(
-                new Message { 
+                new Messages { 
                     Timestamp  = DateTime.Today,
                     Text = "Test Text1",
                     Id = Guid.Parse("136F9CC5-F1E3-48EE-879D-B5D749B4258A"),
                     UserId = UserAId
                 },
-                   new Message
+                   new Messages
                    {
                        Timestamp = DateTime.Today,
                        Text = "Test Text2",
@@ -34,7 +34,7 @@ namespace Messages.Test.Common
                        UserId = UserBId
                    },
 
-                       new Message
+                       new Messages
                        {
                            Timestamp = DateTime.Today,
                            Text = "Test Text3",
@@ -42,7 +42,7 @@ namespace Messages.Test.Common
                            UserId = UserAId
                        },
 
-                           new Message
+                           new Messages
                            {
                                Timestamp = DateTime.Today,
                                Text = "Test Text4",

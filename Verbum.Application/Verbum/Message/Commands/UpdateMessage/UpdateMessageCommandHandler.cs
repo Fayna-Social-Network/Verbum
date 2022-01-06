@@ -18,9 +18,9 @@ namespace Verbum.Application.Verbum.Commands.UpdateMessage
                 await _context.Messages.FirstOrDefaultAsync(mess =>
                     mess.Id == request.Id, cancellationToken);
 
-            if (entity == null || entity.UserId != request.UserId)
+            if (entity == null || entity.Seller != request.UserId)
             {
-                throw new NotFoundException(nameof(Message), request.Id);
+                throw new NotFoundException(nameof(Messages), request.Id);
             }
 
             entity.Text = request.Text;
