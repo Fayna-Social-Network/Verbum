@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Verbum.Application.Verbum.Users.Queries;
+using Verbum.Application.Verbum.Users.Queries.GetAllUserQuery;
 
 namespace Verbum.WebApi.Controllers
 {
@@ -11,6 +11,7 @@ namespace Verbum.WebApi.Controllers
     {
         
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<UsersListVm>> GetAllUsers() {
             var query = new GetAllUsersQuery
             { };

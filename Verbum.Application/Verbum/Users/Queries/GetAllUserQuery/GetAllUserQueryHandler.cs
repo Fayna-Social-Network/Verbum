@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 
-namespace Verbum.Application.Verbum.Users.Queries
+namespace Verbum.Application.Verbum.Users.Queries.GetAllUserQuery
 {
     public class GetAllUserQueryHandler :IRequestHandler<GetAllUsersQuery, UsersListVm>
     {

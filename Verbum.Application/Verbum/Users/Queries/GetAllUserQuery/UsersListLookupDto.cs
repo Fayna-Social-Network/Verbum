@@ -2,7 +2,7 @@
 using Verbum.Application.Common.Mappings;
 using Verbum.Domain;
 
-namespace Verbum.Application.Verbum.Users.Queries
+namespace Verbum.Application.Verbum.Users.Queries.GetAllUserQuery
 {
     public class UsersListLookupDto :IMapWith<VerbumUser>
     {

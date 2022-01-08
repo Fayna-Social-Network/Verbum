@@ -37,8 +37,8 @@ builder.Services.AddAuthentication(config =>
 })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://localhost:44313";
-        options.Audience = "VerbumWepApi";
+        options.Authority = "https://localhost:7039";
+        options.Audience = "VerbumWebAPI";
         options.RequireHttpsMetadata = false;
 
     });
@@ -81,9 +81,12 @@ app.UseHttpsRedirection();
 
 app.UseApiVersioning();
 
-app.UseRouting();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseRouting();
+
+app.UseAuthorization();
+
+
 
 
 

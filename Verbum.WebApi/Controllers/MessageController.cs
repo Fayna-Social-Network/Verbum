@@ -30,11 +30,11 @@ namespace Verbum.WebApi.Controllers
         /// <returns>Returns MessageListVm</returns>
         /// <response code="200">Success</response>
         /// <response code="401">If the user is unauthorized</response>
-        [HttpGet("api/correspondence")]
+        [HttpPost("correspondence")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CorrespondenceVm>> GetCorrespondence(GetCorrespondenceDto dto) {
+        public async Task<ActionResult<CorrespondenceVm>> GetCorrespondence([FromBody] GetCorrespondenceDto dto) {
             var query = new GetCorrespondenceQuery
             {
                 Owner = dto.Owner,
@@ -49,8 +49,7 @@ namespace Verbum.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<Guid>> SendMessage([FromBody] SendMessageDto sendMessageDto) {
             var command = _mapper.Map<SendMessageCommand>(sendMessageDto);
-            command.isRead = false;
-            command.Timestamp = DateTime.UtcNow;
+          
             var messId = await Mediator.Send(command);
             return Ok(messId);
         }
