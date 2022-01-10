@@ -11,7 +11,8 @@ namespace Verbum.Persistence
         public DbSet<VerbumUser> Users { get; set; } = null!;
         public DbSet<UserContact> UserContacts { get; set; } = null!;
         public DbSet<UserBlackList> UserBlackLists { get; set; } = null!;
-        public DbSet<MessageReaction> MessageReactions { get; set; } = null!; 
+        public DbSet<MessageReaction> MessageReactions { get; set; } = null!;
+        public DbSet<Image> Images { get; set; } = null!;     
 
         public VerbumDbContext(DbContextOptions<VerbumDbContext> options)
             :base(options)

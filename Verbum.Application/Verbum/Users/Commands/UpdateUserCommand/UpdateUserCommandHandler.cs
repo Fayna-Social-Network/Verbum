@@ -7,13 +7,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Verbum.Application.Verbum.Users.Commands.UpdateUserCommand
 {
-    public class UpdateUserCommandHandler :IRequest<UpdateUserCommand>
+    public class UpdateUserCommandHandler :IRequestHandler<UpdateUserCommand>
     {
         IVerbumDbContext _dbContext;
-        IHostEnvironment _appEnvironment;
+       
 
-        public UpdateUserCommandHandler(IVerbumDbContext dbContext, IHostEnvironment hostEnvironment)
-            => (_dbContext, _appEnvironment) = (dbContext, hostEnvironment);
+        public UpdateUserCommandHandler(IVerbumDbContext dbContext)
+            => (_dbContext) = (dbContext);
 
 
         public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken) {
@@ -25,19 +25,10 @@ namespace Verbum.Application.Verbum.Users.Commands.UpdateUserCommand
                 throw new NotFoundException(nameof(VerbumUser), request.Id);
             }
 
-            if (request.formFile != null) {
-                
-                string path = "/Avatars/" + request.formFile.FileName;
-               
-                using (var fileStream = new FileStream(_appEnvironment.ContentRootPath + path, FileMode.Create))
-                {
-                    await request.formFile.CopyToAsync(fileStream);
-                }
-                entity.Avatar = path;
-            }
-
+           
             entity.FirstName = request.FirstName;
             entity.LastName = request.LastName;
+            entity.Avatar = request.Avatar;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

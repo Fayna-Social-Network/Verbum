@@ -46,6 +46,8 @@ namespace Verbum.Application.Hubs
                 user.HubConnectionId = Context.ConnectionId;
 
                 await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+                await Clients.Client(Context.ConnectionId).SendAsync("regOk");
             }
 
         }

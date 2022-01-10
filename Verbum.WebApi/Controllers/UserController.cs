@@ -28,6 +28,7 @@ namespace Verbum.WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUserDto dto) {
 
             var command = _mapper.Map<UpdateUserCommand>(dto);
@@ -36,7 +37,8 @@ namespace Verbum.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("{Nickname}")]
+        [Authorize]
         public async Task<ActionResult<CurrentUserVm>> GetCurrentUser(string Nickname) {
 
             var query = new GetCurrentUserQuery
@@ -48,6 +50,8 @@ namespace Verbum.WebApi.Controllers
             var vm = await Mediator.Send(query);
             return Ok(vm);
         }
+
+      
 
     }
 }

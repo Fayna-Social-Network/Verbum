@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -13,7 +14,7 @@ using Verbum.WebApi.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
-
+IWebHostEnvironment env = builder.Environment;
 
 
 builder.Services.AddAutoMapper(config =>
@@ -52,6 +53,14 @@ builder.Services.AddApiVersioning();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+        RequestPath = new PathString("/Resources")
+});
+
 
 app.UseCors(x => x
         .WithOrigins("http://localhost:8080")
