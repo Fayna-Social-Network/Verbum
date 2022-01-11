@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.Commands.DeleteMessage;
 using Verbum.Application.Verbum.Commands.UpdateMessage;
 using Verbum.Application.Verbum.Message.Commands.CreateMessage;
+using Verbum.Application.Verbum.Message.Commands.SetMessageIsRead;
 using Verbum.Application.Verbum.Message.Queries.GetCorrespondence;
+using Verbum.Application.Verbum.Message.Queries.GetCorrespondenceWithUnknowContact;
 using Verbum.WebApi.Models;
 
 namespace Verbum.WebApi.Controllers
@@ -44,6 +46,25 @@ namespace Verbum.WebApi.Controllers
             return Ok(vm);
         }
 
+        [HttpGet("correspondence/{userId}")]
+        public async Task<ActionResult<CorrespondenceVm>> GetCorrespondenceWithUnknowContact(Guid userId) {
+            var query = new GetCorrespondenceWithUnknowContactQuery
+            {
+                UserId = userId
+            };
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        }
+
+        [HttpPut("isRead/{id}")]
+        public async Task<ActionResult> SetMesssageIsRead(Guid id) {
+            var command = new SetMessageIsReadCommand
+            {
+                Id = id
+            };
+            var r = await Mediator.Send(command);
+            return Ok(r);
+        }
 
         [HttpPost]
         [Authorize]
