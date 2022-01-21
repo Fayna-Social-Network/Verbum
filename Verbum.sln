@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verbum.Persistence", "Verbu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verbum.WebApi", "Verbum.WebApi\Verbum.WebApi.csproj", "{D43186A9-B56B-4C45-99C9-DB6AE1FB3197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages.Test", "Messages.Test\Messages.Test.csproj", "{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Test", "Messages.Test\Messages.Test.csproj", "{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

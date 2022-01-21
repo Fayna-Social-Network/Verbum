@@ -12,7 +12,7 @@ namespace Verbum.Persistence
         {
             var connectionString = configuration["DbConnection"];
             services.AddDbContext<VerbumDbContext>(options => {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Verbum.WebApi"));
             });
             services.AddScoped<IVerbumDbContext>(provider => provider.GetService<VerbumDbContext>());
 

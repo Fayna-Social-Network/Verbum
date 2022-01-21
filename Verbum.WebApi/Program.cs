@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Verbum.Application;
 using Verbum.Application.Common.Mappings;
+using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
 using Verbum.Persistence;
 using Verbum.WebApi;
-using Verbum.WebApi.Hubs;
 using Verbum.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
-
+IWebHostEnvironment env = builder.Environment;
 
 
 builder.Services.AddAutoMapper(config =>
@@ -25,16 +25,11 @@ builder.Services.AddAutoMapper(config =>
 
 builder.Services.AddApplication();
 builder.Services.AddPersistans(configuration);
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+); ;
 
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
-    });
-});
+builder.Services.AddCors();
 
 builder.Services.AddAuthentication(config =>
 {
@@ -43,9 +38,10 @@ builder.Services.AddAuthentication(config =>
 })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://localhost:44313";
-        options.Audience = "VerbumWepApi";
+        options.Authority = "https://localhost:7039";
+        options.Audience = "VerbumWebAPI";
         options.RequireHttpsMetadata = false;
+
     });
 
 builder.Services.AddVersionedApiExplorer(options =>
@@ -58,6 +54,20 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+        RequestPath = new PathString("/Resources")
+});
+
+
+app.UseCors(x => x
+        .WithOrigins("http://localhost:8080")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
 
 app.UseSwagger();
 app.UseSwaggerUI(
@@ -74,19 +84,26 @@ app.UseSwaggerUI(
 //}
 );
 app.UseCustomExceptionHandler();
-app.UseRouting();
+
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
-app.UseAuthentication();
-app.UseAuthorization();
+
+
 app.UseApiVersioning();
+
+app.UseAuthentication();
+app.UseRouting();
+
+app.UseAuthorization();
+
+
 
 
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-    endpoints.MapHub<ChatHub>("/home/chat");
+    endpoints.MapHub<VerbumHub>("/verbum/hub");
+   
 });
 
 
