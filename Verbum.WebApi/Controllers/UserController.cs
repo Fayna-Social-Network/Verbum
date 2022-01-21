@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.Users.Commands.UpdateUserCommand;
 using Verbum.Application.Verbum.Users.Queries.GetAllUserQuery;
 using Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery;
+using Verbum.Application.Verbum.Users.Queries.SearchUsersByNickName;
 using Verbum.WebApi.Models;
 
 namespace Verbum.WebApi.Controllers
@@ -26,6 +27,19 @@ namespace Verbum.WebApi.Controllers
             var vm = await Mediator.Send(query);
             return Ok(vm);
         }
+
+
+        [HttpGet("searchbyname/{text}")]
+        [Authorize]
+        public async Task<ActionResult<UsersListVm>> SearchUserByNickName(string text) {
+            var query = new SearchUserByNickNameQuery
+            {
+                Text = text
+            };
+
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+        } 
 
         [HttpPut]
         [Authorize]

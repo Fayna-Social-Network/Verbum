@@ -26,7 +26,11 @@ namespace Verbum.Application.Hubs
                 user.HubConnectionId = "";
                 user.IsOnline = false;
                 await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+                await Clients.All.SendAsync("userIsOffline", user.NickName);
             }
+
+
 
             await base.OnDisconnectedAsync(exception);
         }
@@ -35,6 +39,11 @@ namespace Verbum.Application.Hubs
 
         public async Task SendMessage(Messages message) =>
             await Clients.All.SendAsync("receiveMessage", message);
+
+
+        public async Task SuccessRegistration(string nickname) {
+            await Clients.All.SendAsync("userIsOnline", nickname);
+        }
 
 
         public async Task RegisterUserOnline(string NickName)
@@ -48,6 +57,7 @@ namespace Verbum.Application.Hubs
                 await _dbContext.SaveChangesAsync(CancellationToken.None);
 
                 await Clients.Client(Context.ConnectionId).SendAsync("regOk");
+
             }
 
         }

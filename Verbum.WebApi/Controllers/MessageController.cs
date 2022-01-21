@@ -47,6 +47,7 @@ namespace Verbum.WebApi.Controllers
         }
 
         [HttpGet("correspondence/{userId}")]
+        [Authorize]
         public async Task<ActionResult<CorrespondenceVm>> GetCorrespondenceWithUnknowContact(Guid userId) {
             var query = new GetCorrespondenceWithUnknowContactQuery
             {
@@ -57,6 +58,7 @@ namespace Verbum.WebApi.Controllers
         }
 
         [HttpPut("isRead/{id}")]
+        [Authorize]
         public async Task<ActionResult> SetMesssageIsRead(Guid id) {
             var command = new SetMessageIsReadCommand
             {
