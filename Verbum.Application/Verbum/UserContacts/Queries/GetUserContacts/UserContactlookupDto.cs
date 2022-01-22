@@ -10,13 +10,13 @@ namespace Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts
     {
         public Guid ContactId { get; set; }
         public Guid UserId { get; set; }
-        public string? NickName { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Avatar { get; set; }
-        public string? Email { get; set; }
+        public string NickName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Avatar { get; set; }
+        public string Email { get; set; }
         public bool IsOnline { get; set; }
-        public string? HubConnectionId { get; set; }
+        public string HubConnectionId { get; set; }
         public DateTime UserRegistrationDate { get; set; }
 
         public void Mapping(Profile profile)

@@ -2,7 +2,7 @@
 using Verbum.Application.Common.Mappings;
 using Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser;
 
-namespace Verbum.WebApi.Models
+namespace Verbum.WebApi.Models.UserContacts
 {
     public class AddContactDto :IMapWith<AddContactToUserCommand>
     {
