@@ -36,6 +36,14 @@ namespace Verbum.Application.Hubs
         }
 
 
+        public async Task UserTypingMessage(Guid id) {
+            var user = await _dbContext.Users.SingleAsync(u => u.Id == id);
+            if (user != null) {
+                if (user.IsOnline) {
+                    await Clients.Client(user.HubConnectionId).SendAsync("TypingMessage");
+                }
+            }
+        }
 
         public async Task SendMessage(Messages message) =>
             await Clients.All.SendAsync("receiveMessage", message);
