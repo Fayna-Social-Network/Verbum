@@ -20,6 +20,7 @@ namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
         {
             var message = new Messages
             {
+                Id = request.Id,
                 Text = request.Text,
                 Seller = request.Seller,
                 IsRead = false,

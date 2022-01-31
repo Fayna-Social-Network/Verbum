@@ -1,6 +1,7 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
+using Verbum.Domain;
 
 namespace Verbum.Application.Verbum.Message.Commands.SetMessageIsRead
 {
@@ -14,12 +15,14 @@ namespace Verbum.Application.Verbum.Message.Commands.SetMessageIsRead
 
         public async Task<Unit> Handle(SetMessageIsReadCommand request, CancellationToken cancellationToken) {
             
-            var message = await _dbContext.Messages.SingleOrDefaultAsync(m => m.Id == request.Id);
+            var message = await _dbContext.Messages.FindAsync(new object[] { request.Id }, cancellationToken);
 
-            if (message != null)
+            if (message == null || message.UserId != request.UserId)
             {
-                message.IsRead = true;
+               throw new NotFoundException(nameof(Messages), request.Id);
             }
+
+            message.IsRead = true;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

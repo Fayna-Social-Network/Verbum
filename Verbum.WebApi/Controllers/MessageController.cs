@@ -62,7 +62,8 @@ namespace Verbum.WebApi.Controllers
         public async Task<ActionResult> SetMesssageIsRead(Guid id) {
             var command = new SetMessageIsReadCommand
             {
-                Id = id
+                Id = id,
+                UserId = UserId
             };
             var r = await Mediator.Send(command);
             return Ok(r);
@@ -78,19 +79,20 @@ namespace Verbum.WebApi.Controllers
         }
 
 
-        //[HttpDelete("{id}")]
-        //[Authorize]
-        //public async Task<ActionResult> Delete(Guid id) {
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(Guid id)
+        {
 
-        //    var command = new DeleteMessageCommand
-        //    {
-        //        Id = id,
-        //        UserId = UserId
-        //    };
+            var command = new DeleteMessageCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
 
-        //    await Mediator.Send(command);
-        //    return NoContent();
-        //}
+            await Mediator.Send(command);
+            return NoContent();
+        }
 
         //[HttpPut]
         //[Authorize]

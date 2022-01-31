@@ -6,6 +6,7 @@ namespace Verbum.Application.Verbum.Message.Commands.SetMessageIsRead
     {
         public SetMessageIsReadCommandValidator() {
             RuleFor(x => x.Id).NotEqual(Guid.Empty);
+            RuleFor(x => x.UserId).NotEqual(Guid.Empty);
         }
     }
 }
