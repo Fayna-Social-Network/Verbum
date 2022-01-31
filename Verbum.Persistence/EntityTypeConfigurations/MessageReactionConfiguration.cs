@@ -10,6 +10,7 @@ namespace Verbum.Persistence.EntityTypeConfigurations
             builder.HasOne<Messages>(m => m.Message)
                 .WithMany(n => n.MessageReactions)
                 .HasForeignKey(f => f.MessageId);
+       
         }
     }
 }
