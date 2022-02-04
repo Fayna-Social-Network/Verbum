@@ -115,7 +115,7 @@ using (var scope = app.Services.CreateScope()) {
         DbInitializer.Initialize(context);
     }
     catch (Exception ex) {
-        
+        Console.WriteLine(ex);
     }
 }
 

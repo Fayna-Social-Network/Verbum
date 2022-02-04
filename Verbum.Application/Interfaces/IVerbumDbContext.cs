@@ -10,7 +10,11 @@ namespace Verbum.Application.Interfaces
         DbSet<UserContact> UserContacts { get; set; }
         DbSet<UserBlackList> UserBlackLists { get; set; }
         DbSet<MessageReaction> MessageReactions { get; set; }
-      //  DbSet<Image> Images { get; set; }
+        DbSet<ImageMessage> Images { get; set; }
+        DbSet<AudioMessage> audioMessages { get; set; }
+        DbSet<VideoMessage> videoMessages { get; set; }
+        DbSet<FileMessage> fileMessages { get; set; }
+        
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

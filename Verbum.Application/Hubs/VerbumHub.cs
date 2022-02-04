@@ -36,6 +36,11 @@ namespace Verbum.Application.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
+        public async Task ReactionActivity(ReactionActivityDto dto) {
+
+            await Clients.All.SendAsync("ReactionActive", dto);
+
+        }
 
         public async Task UserTypingMessage(UserTypingDto dto) {
             var user = await _dbContext.Users.SingleAsync(u => u.Id == dto.User);

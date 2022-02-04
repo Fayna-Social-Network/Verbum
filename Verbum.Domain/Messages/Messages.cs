@@ -13,5 +13,9 @@ namespace Verbum.Domain
         public virtual VerbumUser? User { get; set; }
 
         public virtual ICollection<MessageReaction>? MessageReactions { get; set; }
+        public virtual ICollection<ImageMessage>? ImageMessages { get; set; }
+        public virtual ICollection<FileMessage>? FileMessages { get; set; }
+        public AudioMessage? AudioMessage { get; set; }
+        public VideoMessage? VideoMessage { get; set; } 
     }
 }

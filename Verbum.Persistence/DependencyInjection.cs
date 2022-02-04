@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Verbum.Application.Interfaces;
 
+#nullable disable
 namespace Verbum.Persistence
 {
     public static class DependencyInjection

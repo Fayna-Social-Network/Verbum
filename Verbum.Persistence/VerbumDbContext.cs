@@ -12,7 +12,10 @@ namespace Verbum.Persistence
         public DbSet<UserContact> UserContacts { get; set; } = null!;
         public DbSet<UserBlackList> UserBlackLists { get; set; } = null!;
         public DbSet<MessageReaction> MessageReactions { get; set; } = null!;
-       // public DbSet<Image> Images { get; set; } = null!;     
+        public DbSet<ImageMessage> Images { get; set; } = null!;
+        public DbSet<AudioMessage> audioMessages { get; set; } = null!;
+        public DbSet<VideoMessage> videoMessages { get; set; } = null!;
+        public DbSet<FileMessage> fileMessages { get; set; } = null!;
 
         public VerbumDbContext(DbContextOptions<VerbumDbContext> options)
             :base(options)
@@ -25,6 +28,10 @@ namespace Verbum.Persistence
             builder.ApplyConfiguration(new UserContactConfiguration());
             builder.ApplyConfiguration(new UserBlackListConfiguration());
             builder.ApplyConfiguration(new MessageReactionConfiguration());
+            builder.ApplyConfiguration(new AudioMessageConfiguration());
+            builder.ApplyConfiguration(new FileMessageConfiguration());
+            builder.ApplyConfiguration(new ImageMessageConfiguration());
+            builder.ApplyConfiguration(new VideMessageConfiguration());
             base.OnModelCreating(builder);
         }
     }

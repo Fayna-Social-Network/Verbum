@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.Reactions.Commands.AddReaction;
+using Verbum.Application.Verbum.Reactions.Queries.GetReactionsQuery;
 using Verbum.WebApi.Models.Reactions;
 
 namespace Verbum.WebApi.Controllers
@@ -25,6 +26,16 @@ namespace Verbum.WebApi.Controllers
             var vm  = await Mediator.Send(command);
 
             return Ok(vm);
+        }
+
+        [HttpGet("{messageId}")]
+        [Authorize]
+        public async Task<ActionResult<ReactionsVm>> GetReactions(Guid messageId) {
+            var query = new GetReactionsQuery
+            {
+                MessageId = messageId
+            };
+            return await Mediator.Send(query);
         }
     }
 }
