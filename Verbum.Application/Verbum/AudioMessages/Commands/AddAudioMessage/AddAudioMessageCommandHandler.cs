@@ -27,6 +27,19 @@ namespace Verbum.Application.Verbum.AudioMessages.Commands.AddAudioMessage
                 IsRead = false
             };
 
+            var recipient = await _dbContext.Users.SingleAsync(r => r.Id == message.UserId);
+
+            if (recipient != null)
+            {
+                if (recipient.IsOnline)
+                {
+                    if (recipient.HubConnectionId != null)
+                    {
+                        await _hubContext.Clients.Client(recipient.HubConnectionId).SendAsync("acceptMessage", message);
+                    }
+                }
+            }
+
             await _dbContext.Messages.AddAsync(message, cancellationToken);
            
 
@@ -40,18 +53,7 @@ namespace Verbum.Application.Verbum.AudioMessages.Commands.AddAudioMessage
             await _dbContext.SaveChangesAsync(cancellationToken);
 
 
-            var recipient = await _dbContext.Users.SingleAsync(r => r.Id == message.UserId);
-
-            if (recipient != null)
-            {
-                if (recipient.IsOnline)
-                {
-                    if (recipient.HubConnectionId != null)
-                    {
-                        await _hubContext.Clients.Client(recipient.HubConnectionId).SendAsync("acceptMessage", message);
-                    }
-                }
-            }
+           
 
             return message.Id;
            
