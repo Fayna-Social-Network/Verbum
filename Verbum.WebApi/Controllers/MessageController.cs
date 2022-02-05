@@ -19,8 +19,10 @@ namespace Verbum.WebApi.Controllers
     public class MessageController : BaseController
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<MessageController> _logger;
 
-        public MessageController(IMapper mapper) => _mapper = mapper;
+        public MessageController(IMapper mapper, ILogger<MessageController> logger) => 
+            (_mapper, _logger) = (mapper, logger);
 
         /// <summary>
         /// Gets the list of Messages
@@ -37,6 +39,7 @@ namespace Verbum.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<CorrespondenceVm>> GetCorrespondence([FromBody] GetCorrespondenceDto dto) {
+            _logger.LogInformation("GetCorrespondences executing...");
             var query = new GetCorrespondenceQuery
             {
                 Owner = dto.Owner,
