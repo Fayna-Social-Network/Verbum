@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 
 #nullable disable
 namespace Verbum.Application.Verbum.Reactions.Commands.AddReaction

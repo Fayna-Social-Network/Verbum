@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Persistence.EntityTypeConfigurations
 {

@@ -1,5 +1,5 @@
 ﻿using Verbum.Application.Common.Mappings;
-using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 using AutoMapper;
 
 namespace Verbum.Application.Verbum.AudioMessages.Queries.GetAudioMessageQuery

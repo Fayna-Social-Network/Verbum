@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Verbum.Application.Verbum.Repositories;
 
 namespace Verbum.WebApi.Controllers
 {
@@ -9,34 +9,17 @@ namespace Verbum.WebApi.Controllers
     [ApiController]
     public class UploadFilesController : BaseController
     {
+        private readonly FilesRepository _filesRepository;
+
+        public UploadFilesController(FilesRepository filesRepository) => _filesRepository = filesRepository;
+
         [Authorize]
         [HttpPost("{type}")]
         public async Task<ActionResult<string>> UploadFile(IFormFile file, string type)
         {
-           
-            var folder = Path.Combine("Resources", UserId.ToString());
-            var folderName = Path.Combine(folder, type);
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = GetFileName(type, file);
-            var dbPath = Path.Combine(folderName, fileName);
-            var fullPath = Path.Combine(pathToSave, fileName);
+            var path = await _filesRepository.Upload(file, type, UserId);
 
-            if (!System.IO.Directory.Exists(pathToSave))//create path 
-            {
-                Directory.CreateDirectory(pathToSave);
-            }
-
-           
-            if (file != null)
-            {
-
-                using (var stream = System.IO.File.Create(fullPath))
-                {
-                    await file.CopyToAsync(stream);
-                }
-                return Ok(dbPath);  
-            }
-            throw new Exception();
+          return Ok(path);
         }
 
 
@@ -44,27 +27,7 @@ namespace Verbum.WebApi.Controllers
         [HttpPost("many/{type}")]
         public async Task<ActionResult<List<string>>> AddFiles(IFormFileCollection uploads, string type)
         {
-            List<string> files = new List<string>();       
-
-            var folder = Path.Combine("Resources", UserId.ToString());
-            var folderName = Path.Combine(folder, type);
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-            foreach (var uploadedFile in uploads)
-            {
-                var fileName = Path.GetRandomFileName() + uploadedFile.FileName;
-                var dbPath = Path.Combine(folderName, fileName);
-                var fullPath = Path.Combine(pathToSave, fileName);
-
-                
-               
-                using (var stream = System.IO.File.Create(fullPath))
-                {
-                    await uploadedFile.CopyToAsync(stream);
-                }
-                files.Add(dbPath);
-            }
-            
+            var files = await _filesRepository.Uploads(uploads, type, UserId);
 
             return Ok(files);
         }
@@ -73,26 +36,14 @@ namespace Verbum.WebApi.Controllers
         [Authorize]
         [HttpDelete("{fileDbPath}")]
         public ActionResult DeleteFile(string fileDbPath) {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), fileDbPath);
-            FileInfo fileInf = new FileInfo(path);
-            if (fileInf.Exists)
-            {
-                fileInf.Delete();
-                return Ok(fileInf.FullName);
-            }
+            
+            var result = _filesRepository.Delete(fileDbPath);
 
-            return BadRequest(fileDbPath);
+            return Ok(result);
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public string GetFileName(string type, IFormFile file) {
-            var fileName = Path.GetRandomFileName() + file.FileName;
-            if (type == "audiomessage")
-            {
-                return fileName + ".wav";
-            }
-            return fileName;
-        }
+       
+       
 
     }
 }

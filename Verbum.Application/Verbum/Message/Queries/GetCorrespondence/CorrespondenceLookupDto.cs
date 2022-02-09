@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Verbum.Application.Common.Mappings;
-using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Application.Verbum.Message.Queries.GetCorrespondence
 {

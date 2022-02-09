@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Application.Interfaces
 {
@@ -10,6 +11,7 @@ namespace Verbum.Application.Interfaces
         DbSet<UserContact> UserContacts { get; set; }
         DbSet<UserBlackList> UserBlackLists { get; set; }
         DbSet<MessageReaction> MessageReactions { get; set; }
+        DbSet<ImageAlbum> ImageAlbums { get; set; }
         DbSet<ImageMessage> Images { get; set; }
         DbSet<AudioMessage> audioMessages { get; set; }
         DbSet<VideoMessage> videoMessages { get; set; }

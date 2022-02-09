@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 using Verbum.Persistence.EntityTypeConfigurations;
 
 namespace Verbum.Persistence
@@ -12,6 +13,7 @@ namespace Verbum.Persistence
         public DbSet<UserContact> UserContacts { get; set; } = null!;
         public DbSet<UserBlackList> UserBlackLists { get; set; } = null!;
         public DbSet<MessageReaction> MessageReactions { get; set; } = null!;
+        public DbSet<ImageAlbum> ImageAlbums { get; set; } = null!;
         public DbSet<ImageMessage> Images { get; set; } = null!;
         public DbSet<AudioMessage> audioMessages { get; set; } = null!;
         public DbSet<VideoMessage> videoMessages { get; set; } = null!;
@@ -32,6 +34,7 @@ namespace Verbum.Persistence
             builder.ApplyConfiguration(new FileMessageConfiguration());
             builder.ApplyConfiguration(new ImageMessageConfiguration());
             builder.ApplyConfiguration(new VideMessageConfiguration());
+            builder.ApplyConfiguration(new ImageAlbumConfiguration());
             base.OnModelCreating(builder);
         }
     }

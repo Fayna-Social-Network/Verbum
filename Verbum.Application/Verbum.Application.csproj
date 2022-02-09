@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Verbum.Domain\Verbum.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Verbum\ImageMessages\Commands\" />
-  </ItemGroup>
-
 </Project>

@@ -8,6 +8,7 @@ using Verbum.Application;
 using Verbum.Application.Common.Mappings;
 using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
+using Verbum.Application.Verbum.Repositories;
 using Verbum.Persistence;
 using Verbum.WebApi;
 using Verbum.WebApi.Middleware;
@@ -25,6 +26,7 @@ builder.Services.AddAutoMapper(config =>
 });
 
 builder.Services.AddApplication();
+builder.Services.AddVerbumRepositories();
 builder.Services.AddPersistans(configuration);
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -59,6 +61,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
 builder.Services.AddSwaggerGen();
 builder.Services.AddApiVersioning();
 builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 

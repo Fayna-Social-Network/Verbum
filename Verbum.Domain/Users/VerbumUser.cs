@@ -1,4 +1,5 @@
-﻿
+﻿using Verbum.Domain.MessagesDb;
+
 namespace Verbum.Domain
 {
     public class VerbumUser

@@ -1,16 +1,19 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain;
+using Verbum.Application.Verbum.Repositories;
+using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Application.Verbum.Commands.DeleteMessage
 {
     public class DeleteMessageCommandHandler :IRequestHandler<DeleteMessageCommand>
     {
         private readonly IVerbumDbContext _dbContext;
+        private readonly FilesRepository _filesRepository;
 
-        public DeleteMessageCommandHandler(IVerbumDbContext dbContext) =>
-            _dbContext = dbContext;
+        public DeleteMessageCommandHandler(IVerbumDbContext dbContext, FilesRepository filesRepository) =>
+            (_dbContext, _filesRepository) = (dbContext, filesRepository);
 
         public async Task<Unit> Handle(DeleteMessageCommand request,
             CancellationToken cancellationToken)
@@ -22,12 +25,24 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                 throw new NotFoundException(nameof(Messages), request.Id);
             }
 
+            await DeletingFilesIncludedMessage(entity.Id);
+
             _dbContext.Messages.Remove(entity);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
-        } 
+        }
 
+        public async Task DeletingFilesIncludedMessage(Guid messageId) {
+            
+                var audio = await _dbContext.audioMessages.SingleOrDefaultAsync(a => a.MessageId == messageId);
+                if (audio != null)
+                {
+                    _filesRepository.Delete(audio.path!);
+                }
+          
+            
+        }
         
     }
 }
