@@ -52,7 +52,7 @@ namespace Verbum.Application.Verbum.ImageMessages.Commands.AddImagesMessageComma
                 }
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
-            return imageAlbum.Id;
+            return message.Id;
         }
     }
 }

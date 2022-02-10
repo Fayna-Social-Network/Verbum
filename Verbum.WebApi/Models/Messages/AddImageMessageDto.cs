@@ -5,7 +5,7 @@ using Verbum.Application.Verbum.ImageMessages.Commands.AddImagesMessageCommand;
 
 namespace Verbum.WebApi.Models.Messages
 {
-    public class AddImageMessageDto
+    public class AddImageMessageDto :IMapWith<AddImagesMessageCommand>
     {
         public Guid SellerId { get; set; }
         public Guid UserId { get; set; }

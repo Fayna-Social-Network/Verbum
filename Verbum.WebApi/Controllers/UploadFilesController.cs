@@ -25,6 +25,7 @@ namespace Verbum.WebApi.Controllers
 
         [Authorize]
         [HttpPost("many/{type}")]
+        [RequestSizeLimit(900_000_000)]
         public async Task<ActionResult<List<string>>> AddFiles(IFormFileCollection uploads, string type)
         {
             var files = await _filesRepository.Uploads(uploads, type, UserId);

@@ -39,6 +39,11 @@ namespace Verbum.Application.Verbum.Repositories
             var folderName = Path.Combine(folder, type);
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
+            if (!System.IO.Directory.Exists(pathToSave))//create path 
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+
             foreach (var uploadedFile in uploads)
             {
                 var fileName = Path.GetRandomFileName() + uploadedFile.FileName;
