@@ -40,7 +40,16 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                 {
                     _filesRepository.Delete(audio.path!);
                 }
-          
+            var imageAlbum = await _dbContext.ImageAlbums.Include(im => im.ImageMessages).SingleOrDefaultAsync(a => a.MessageId == messageId);
+            if (imageAlbum != null)
+            {
+                if (imageAlbum.ImageMessages != null)
+                {
+                    foreach (var image in imageAlbum.ImageMessages) {
+                        _filesRepository.Delete(image.Path!);
+                    }
+                }
+            }
             
         }
         

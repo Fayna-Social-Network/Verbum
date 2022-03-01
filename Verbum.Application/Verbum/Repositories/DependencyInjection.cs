@@ -8,6 +8,7 @@ namespace Verbum.Application.Verbum.Repositories
 
             services.AddTransient<FilesRepository>();
             services.AddTransient<VerbumHubRepository>();
+            services.AddTransient<OpenGraphRepository>();
             
             return services;
         }

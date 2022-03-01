@@ -17,7 +17,7 @@ namespace Verbum.Application.Verbum.Repositories
 
         public async Task NotificateUserForMessage(Messages message) {
             
-            var recipient = await _dbContext.Users.SingleAsync(r => r.Id == message.UserId);
+            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == message.UserId);
 
             if (recipient != null)
             {
