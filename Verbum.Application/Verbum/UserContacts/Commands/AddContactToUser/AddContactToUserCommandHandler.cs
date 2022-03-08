@@ -16,7 +16,9 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
             {
                 Id = Guid.NewGuid(),
                 Contact = request.Contact,
-                UserId = request.UserId
+                UserId = request.UserId,
+                Name = request.Name,
+                Group = request.Group
             };
           
             await _dbContext.UserContacts.AddAsync(contact, cancellationToken);
