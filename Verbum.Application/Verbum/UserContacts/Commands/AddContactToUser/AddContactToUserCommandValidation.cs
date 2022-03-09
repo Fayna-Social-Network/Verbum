@@ -8,7 +8,7 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
             RuleFor(x => x.Contact).NotEqual(Guid.Empty);
             RuleFor(x => x.UserId).NotEqual(Guid.Empty);
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Group).NotEmpty();
+            RuleFor(x => x.GroupId).NotEqual(Guid.Empty);
         }
     }
 }

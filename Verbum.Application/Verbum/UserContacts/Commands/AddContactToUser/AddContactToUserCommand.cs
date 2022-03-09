@@ -6,7 +6,8 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
     {
         public Guid Contact { get; set; }
         public Guid UserId { get; set; }
+        public Guid GroupId { get; set; }
         public string? Name { get; set; }
-        public string? Group { get; set; }
+       
     }
 }

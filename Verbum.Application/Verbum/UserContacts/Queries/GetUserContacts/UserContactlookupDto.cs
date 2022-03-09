@@ -11,7 +11,8 @@ namespace Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts
         public Guid ContactId { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
-        public string Group { get; set; }
+        public Guid GroupId { get; set; }
+        public string GroupName { get; set; }
         public string NickName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -27,7 +28,8 @@ namespace Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts
                 .ForMember(u => u.ContactId, opt => opt.MapFrom(m => m.Id))
                 .ForMember(u => u.UserId, opt => opt.MapFrom(m => m.User.Id))
                 .ForMember(u => u.Name, opt => opt.MapFrom(m => m.Name))
-                .ForMember(u => u.Group, opt => opt.MapFrom(m => m.Group))
+                .ForMember(u => u.GroupId, opt => opt.MapFrom(m => m.Group.Id))
+                .ForMember(u => u.GroupName, opt => opt.MapFrom(m => m.Group.GroupName))
                 .ForMember(u => u.NickName, opt => opt.MapFrom(m => m.User.NickName))
                 .ForMember(u => u.FirstName, opt => opt.MapFrom(m => m.User.FirstName))
                 .ForMember(u => u.LastName, opt => opt.MapFrom(m => m.User.LastName))
