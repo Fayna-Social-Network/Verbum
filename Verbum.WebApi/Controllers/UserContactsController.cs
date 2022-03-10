@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser;
+using Verbum.Application.Verbum.UserContacts.Commands.ChangeContactGroup;
 using Verbum.Application.Verbum.UserContacts.Commands.DeleteContactFromUser;
 using Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts;
 using Verbum.WebApi.Models.UserContacts;
@@ -52,5 +53,16 @@ namespace Verbum.WebApi.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult> UpdateContactGroup(UpdateContactGroupDto dto) {
+            var command = _mapper.Map<ChangeContactGroupCommand>(dto);
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        } 
+
     }
 }

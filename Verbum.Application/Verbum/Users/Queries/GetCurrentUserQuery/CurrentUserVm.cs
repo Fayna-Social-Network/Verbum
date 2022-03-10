@@ -15,6 +15,7 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
         public bool IsOnline { get; set; } = false;
         public string? HubConnectionId { get; set; }
         public DateTime UserRegistrationDate { get; set; }
+        public List<UserContactGroups>? contactGroups { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<VerbumUser, CurrentUserVm>()
@@ -26,8 +27,8 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
                      .ForMember(u => u.Email, opt => opt.MapFrom(x => x.Email))
                       .ForMember(u => u.IsOnline, opt => opt.MapFrom(x => x.IsOnline))
                        .ForMember(u => u.HubConnectionId, opt => opt.MapFrom(x => x.HubConnectionId))
-                        .ForMember(u => u.UserRegistrationDate, opt => opt.MapFrom(x => x.UserRegistrationDate));
-
+                        .ForMember(u => u.UserRegistrationDate, opt => opt.MapFrom(x => x.UserRegistrationDate))
+                         .ForMember(u => u.contactGroups, opt => opt.MapFrom(x => x.ContactGroups));    
 
         }
     }
