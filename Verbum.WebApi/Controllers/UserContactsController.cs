@@ -54,15 +54,22 @@ namespace Verbum.WebApi.Controllers
             return Ok();
         }
 
+        //[Authorize]
+        //[HttpPut]
+        //public async Task<ActionResult> UpdateContactGroup([FromBody] UpdateContactGroupDto dto)
+        //{
+        //    var command = _mapper.Map<ChangeContactGroupCommand>(dto);
+
+        //    await Mediator.Send(command);
+
+        //    return Ok();
+        //}
+
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult> UpdateContactGroup(UpdateContactGroupDto dto) {
-            var command = _mapper.Map<ChangeContactGroupCommand>(dto);
-
-            await Mediator.Send(command);
+        public async Task<ActionResult> UpdateContact(UpdateContactDto dto) {
 
             return NoContent();
-        } 
-
+        }
     }
 }

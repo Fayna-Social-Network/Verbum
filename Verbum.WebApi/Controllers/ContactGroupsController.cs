@@ -56,7 +56,7 @@ namespace Verbum.WebApi.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult> UpdateContactGroupName([FromBody] UpdateContactGroupDto Dto) {
+        public async Task<ActionResult> UpdateContactGroupName(UpdateContactGroupDto Dto) {
             var command = _mapper.Map<UpdateContactGroupCommand>(Dto);
             await Mediator.Send(command);
             return NoContent();
