@@ -19,8 +19,10 @@ namespace Verbum.WebApi.Controllers
     public class MessageController : BaseController
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<MessageController> _logger;
 
-        public MessageController(IMapper mapper) => _mapper = mapper;
+        public MessageController(IMapper mapper, ILogger<MessageController> logger) => 
+            (_mapper, _logger) = (mapper, logger);
 
         /// <summary>
         /// Gets the list of Messages
@@ -37,6 +39,7 @@ namespace Verbum.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<CorrespondenceVm>> GetCorrespondence([FromBody] GetCorrespondenceDto dto) {
+            _logger.LogInformation("GetCorrespondences executing...");
             var query = new GetCorrespondenceQuery
             {
                 Owner = dto.Owner,
@@ -62,7 +65,8 @@ namespace Verbum.WebApi.Controllers
         public async Task<ActionResult> SetMesssageIsRead(Guid id) {
             var command = new SetMessageIsReadCommand
             {
-                Id = id
+                Id = id,
+                UserId = UserId
             };
             var r = await Mediator.Send(command);
             return Ok(r);
@@ -78,19 +82,20 @@ namespace Verbum.WebApi.Controllers
         }
 
 
-        //[HttpDelete("{id}")]
-        //[Authorize]
-        //public async Task<ActionResult> Delete(Guid id) {
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Delete(Guid id)
+        {
 
-        //    var command = new DeleteMessageCommand
-        //    {
-        //        Id = id,
-        //        UserId = UserId
-        //    };
+            var command = new DeleteMessageCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
 
-        //    await Mediator.Send(command);
-        //    return NoContent();
-        //}
+            await Mediator.Send(command);
+            return NoContent();
+        }
 
         //[HttpPut]
         //[Authorize]

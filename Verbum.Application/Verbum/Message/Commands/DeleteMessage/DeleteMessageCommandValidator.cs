@@ -7,8 +7,8 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
         public DeleteMessageCommandValidator() {
             RuleFor(deleteMessageCommand =>
                 deleteMessageCommand.Id).NotEqual(Guid.Empty);
-            RuleFor(deleteMessageCommand =>
-                deleteMessageCommand.UserId).NotEqual(Guid.Empty);
+            RuleFor(d => d.UserId).NotEqual(Guid.Empty);
+           
         }
     }
 }

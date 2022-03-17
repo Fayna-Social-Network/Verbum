@@ -18,7 +18,7 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
             (_dbContext, _mapper) = (dbContext, mapper);
 
         public async Task<CurrentUserVm> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken) {
-            var query = await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == request.NickName, cancellationToken);
+            var query = await _dbContext.Users.Include(c => c.ContactGroups).FirstOrDefaultAsync(u => u.NickName == request.NickName, cancellationToken);
 
             if (query == null) {
                 throw new NotFoundException(nameof(VerbumUser), request.NickName);

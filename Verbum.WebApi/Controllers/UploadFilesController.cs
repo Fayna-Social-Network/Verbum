@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Verbum.Application.Verbum.Repositories;
 
 namespace Verbum.WebApi.Controllers
 {
@@ -10,35 +9,42 @@ namespace Verbum.WebApi.Controllers
     [ApiController]
     public class UploadFilesController : BaseController
     {
+        private readonly FilesRepository _filesRepository;
+
+        public UploadFilesController(FilesRepository filesRepository) => _filesRepository = filesRepository;
+
         [Authorize]
-        [HttpPost("image")]
-        public async Task<ActionResult<string>> UploadImage(IFormFile file)
+        [HttpPost("{type}")]
+        public async Task<ActionResult<string>> UploadFile(IFormFile file, string type)
         {
-            var folderName = Path.Combine("Resources", "Images");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = Path.GetRandomFileName() + file.FileName;
-            var dbPath = Path.Combine(folderName, fileName);
-            var fullPath = Path.Combine(pathToSave, fileName);
+            var path = await _filesRepository.Upload(file, type, UserId);
 
-            if (!System.IO.Directory.Exists(pathToSave))//create path 
-            {
-                Directory.CreateDirectory(pathToSave);
-            }
+          return Ok(path);
+        }
 
-           
-            if (file != null)
-            {
 
-                using (var stream = System.IO.File.Create(fullPath))
-                {
-                    await file.CopyToAsync(stream);
-                }
+        [Authorize]
+        [HttpPost("many/{type}")]
+        [RequestSizeLimit(900_000_000)]
+        public async Task<ActionResult<List<string>>> AddFiles(IFormFileCollection uploads, string type)
+        {
+            var files = await _filesRepository.Uploads(uploads, type, UserId);
 
+            return Ok(files);
+        }
+
+
+        [Authorize]
+        [HttpDelete("{fileDbPath}")]
+        public ActionResult DeleteFile(string fileDbPath) {
             
+            var result = _filesRepository.Delete(fileDbPath);
 
-                return Ok(dbPath);  
-            }
-            throw new Exception();
-        }  
+            return Ok(result);
+        }
+
+       
+       
+
     }
 }

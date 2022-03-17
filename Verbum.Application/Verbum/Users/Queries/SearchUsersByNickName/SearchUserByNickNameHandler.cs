@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Users.Queries.GetAllUserQuery;
 
+#nullable disable
 namespace Verbum.Application.Verbum.Users.Queries.SearchUsersByNickName
 {
     public class SearchUserByNickNameHandler : IRequestHandler<SearchUserByNickNameQuery, UsersListVm>
@@ -17,7 +18,7 @@ namespace Verbum.Application.Verbum.Users.Queries.SearchUsersByNickName
 
         public async Task<UsersListVm> Handle(SearchUserByNickNameQuery request, CancellationToken cancellationToken) {
             var query = await (from user in _dbContext.Users
-                                where user.NickName.StartsWith(request.Text)
+                                where user.NickName!.StartsWith(request.Text)
                                 orderby user.NickName descending
                                 select user)
                                 .ProjectTo<UsersListLookupDto>(_mapper.ConfigurationProvider)

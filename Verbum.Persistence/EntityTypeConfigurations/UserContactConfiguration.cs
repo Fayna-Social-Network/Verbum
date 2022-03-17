@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Verbum.Domain;
+using Verbum.Domain.Users;
 
 namespace Verbum.Persistence.EntityTypeConfigurations
 {
@@ -11,7 +12,11 @@ namespace Verbum.Persistence.EntityTypeConfigurations
             builder.HasOne<VerbumUser>(a => a.User)
                 .WithMany(d => d.Contacts)
                 .HasForeignKey(a => a.Contact);
-                
+
+            builder.HasOne<ContactGroup>(c => c.Group)
+               .WithMany(c => c.userContacts)
+               .HasForeignKey(a => a.GroupId);
+               
         }
     }
 }

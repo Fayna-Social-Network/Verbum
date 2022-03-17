@@ -21,6 +21,7 @@ namespace Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts
             
             var query = await _dbContext.UserContacts.Where(u => u.UserId == request.UserId)
                 .Include(p => p.User)
+                .Include(g => g.Group)
                 .ProjectTo<UserContactlookupDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
                      

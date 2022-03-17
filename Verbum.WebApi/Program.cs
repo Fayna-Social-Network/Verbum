@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Verbum.Application;
 using Verbum.Application.Common.Mappings;
 using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
+using Verbum.Application.Verbum.Repositories;
 using Verbum.Persistence;
 using Verbum.WebApi;
 using Verbum.WebApi.Middleware;
@@ -24,10 +26,18 @@ builder.Services.AddAutoMapper(config =>
 });
 
 builder.Services.AddApplication();
+builder.Services.AddVerbumRepositories();
 builder.Services.AddPersistans(configuration);
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-); ;
+);
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddCors();
 
@@ -51,6 +61,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
 builder.Services.AddSwaggerGen();
 builder.Services.AddApiVersioning();
 builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 
@@ -115,7 +126,7 @@ using (var scope = app.Services.CreateScope()) {
         DbInitializer.Initialize(context);
     }
     catch (Exception ex) {
-        
+        Console.WriteLine(ex);
     }
 }
 

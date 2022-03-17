@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser;
+using Verbum.Application.Verbum.UserContacts.Commands.ChangeContactGroup;
+using Verbum.Application.Verbum.UserContacts.Commands.DeleteContactFromUser;
 using Verbum.Application.Verbum.UserContacts.Queries.GetUserContacts;
-using Verbum.WebApi.Models;
+using Verbum.WebApi.Models.UserContacts;
 
 namespace Verbum.WebApi.Controllers
 {
@@ -38,5 +39,32 @@ namespace Verbum.WebApi.Controllers
             var vm = await Mediator.Send(query);
             return Ok(vm);
         }
+
+
+        [Authorize]
+        [HttpDelete("{contactId}")]
+        public async Task<ActionResult> DeleteContactFromUser(Guid contactId) {
+
+            var command = new DeleteContactFromUserCommand
+            {
+                contactId = contactId
+            };
+         
+            await Mediator.Send(command);
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult> UpdateContactGroup (UpdateContactDto dto)
+        {
+            var command = _mapper.Map<ChangeContactGroupCommand>(dto);
+
+            await Mediator.Send(command);
+
+            return Ok();
+        }
+
+
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Verbum.Application.Hubs.dtos;
 using Verbum.Application.Interfaces;
-using Verbum.Domain;
+using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Application.Hubs
 {
@@ -35,7 +36,20 @@ namespace Verbum.Application.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
+        public async Task ReactionActivity(ReactionActivityDto dto) {
 
+            await Clients.All.SendAsync("ReactionActive", dto);
+
+        }
+
+        public async Task UserTypingMessage(UserTypingDto dto) {
+            var user = await _dbContext.Users.SingleAsync(u => u.Id == dto.User);
+            if (user != null) {
+                if (user.IsOnline) {
+                    await Clients.Client(user.HubConnectionId).SendAsync("TypingMessage",  dto.FromWho);
+                }
+            }
+        }
 
         public async Task SendMessage(Messages message) =>
             await Clients.All.SendAsync("receiveMessage", message);
