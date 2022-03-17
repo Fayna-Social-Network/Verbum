@@ -30,5 +30,17 @@ namespace Verbum.Application.Verbum.Repositories
                 }
             }
         }
+
+        public async Task NotificateUserForMessageIsRead(Messages message) {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == message.Seller);
+
+            if (user != null) {
+                if (user.IsOnline) {
+                    if (user.HubConnectionId != null) {
+                        await _hubContext.Clients.Client(user.HubConnectionId).SendAsync("messageIsRead", message);
+                    }
+                }
+            }
+        }
     }
 }
