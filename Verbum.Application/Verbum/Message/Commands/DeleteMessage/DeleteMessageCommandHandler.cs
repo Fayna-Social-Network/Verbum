@@ -11,9 +11,10 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
     {
         private readonly IVerbumDbContext _dbContext;
         private readonly FilesRepository _filesRepository;
+        private readonly VerbumHubRepository _verbumHub;
 
-        public DeleteMessageCommandHandler(IVerbumDbContext dbContext, FilesRepository filesRepository) =>
-            (_dbContext, _filesRepository) = (dbContext, filesRepository);
+        public DeleteMessageCommandHandler(IVerbumDbContext dbContext, FilesRepository filesRepository, VerbumHubRepository verbumHub) =>
+            (_dbContext, _filesRepository, _verbumHub) = (dbContext, filesRepository, verbumHub);
 
         public async Task<Unit> Handle(DeleteMessageCommand request,
             CancellationToken cancellationToken)
@@ -26,6 +27,7 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
             }
 
             await DeletingFilesIncludedMessage(entity.Id);
+            await _verbumHub.NotificateUserForMessageIsDelete(entity, request.UserId);
 
             _dbContext.Messages.Remove(entity);
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -38,7 +40,11 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                 var audio = await _dbContext.audioMessages.SingleOrDefaultAsync(a => a.MessageId == messageId);
                 if (audio != null)
                 {
-                    _filesRepository.Delete(audio.path!);
+                var audios = await _dbContext.audioMessages.Where(a => a.path == audio.path).ToListAsync();
+                    if (audios.Count == 1)
+                    {
+                        _filesRepository.Delete(audio.path!);
+                    }
                 }
             var imageAlbum = await _dbContext.ImageAlbums.Include(im => im.ImageMessages).SingleOrDefaultAsync(a => a.MessageId == messageId);
             if (imageAlbum != null)
@@ -46,7 +52,11 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                 if (imageAlbum.ImageMessages != null)
                 {
                     foreach (var image in imageAlbum.ImageMessages) {
-                        _filesRepository.Delete(image.Path!);
+                        var images = await _dbContext.Images.Where(im => im.Path == image.Path).ToListAsync();
+                        if (images.Count == 1)
+                        {
+                            _filesRepository.Delete(image.Path!);
+                        }
                     }
                 }
             }

@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
-using AutoMapper.QueryableExtensions;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Domain;
+
 
 #nullable disable
 namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
@@ -18,12 +18,25 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
             (_dbContext, _mapper) = (dbContext, mapper);
 
         public async Task<CurrentUserVm> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken) {
-            var query = await _dbContext.Users.Include(c => c.ContactGroups).FirstOrDefaultAsync(u => u.NickName == request.NickName, cancellationToken);
+            var query = await _dbContext.Users
+                .Include(c => c.ContactGroups)
+                .Include(st => st.stickersGroups)
+                .FirstOrDefaultAsync(u => u.NickName == request.NickName, cancellationToken);
+
 
             if (query == null) {
                 throw new NotFoundException(nameof(VerbumUser), request.NickName);
             }
 
+            foreach(var group in query.stickersGroups) {  
+                var stickers = await _dbContext.Stickers.Where(s => s.StickerGroupId == group.Id)
+                    .ToListAsync();
+
+                group.Stickers = stickers;
+              
+            }
+
+           
             return _mapper.Map<CurrentUserVm>(query);
         }
     }

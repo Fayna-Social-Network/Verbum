@@ -1,4 +1,5 @@
 ﻿using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Stikers;
 using Verbum.Domain.Users;
 
 namespace Verbum.Domain
@@ -20,5 +21,6 @@ namespace Verbum.Domain
         public virtual ICollection<Messages>? Messages { get; set; }
         public virtual ICollection<UserBlackList>? UserBlackLists { get; set; }
         public ICollection<ContactGroup>? ContactGroups { get; set; }
+        public ICollection<StickersGroup>? stickersGroups { get; set; }
     }
 }

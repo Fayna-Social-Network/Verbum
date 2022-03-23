@@ -42,5 +42,30 @@ namespace Verbum.Application.Verbum.Repositories
                 }
             }
         }
+
+        public async Task NotificateUserForMessageIsDelete(Messages message, Guid UserId) {
+            Guid recipientId;
+            if (message.Seller == UserId)
+            {
+                recipientId = message.UserId;
+            }
+            else
+            {
+                recipientId = message.Seller;
+            }
+
+            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == recipientId);
+
+            if (recipient != null)
+            {
+                if (recipient.IsOnline)
+                {
+                    if (recipient.HubConnectionId != null)
+                    {
+                        await _hubContext.Clients.Client(recipient.HubConnectionId).SendAsync("messageIsDelete", message.Id);
+                    }
+                }
+            }
+        }
     }
 }
