@@ -21,6 +21,7 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
             var query = await _dbContext.Users
                 .Include(c => c.ContactGroups)
                 .Include(st => st.stickersGroups)
+                .Include(bl => bl.UserBlackLists)
                 .FirstOrDefaultAsync(u => u.NickName == request.NickName, cancellationToken);
 
 

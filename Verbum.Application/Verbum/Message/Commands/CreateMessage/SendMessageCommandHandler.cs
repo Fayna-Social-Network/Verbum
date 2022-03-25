@@ -11,14 +11,18 @@ namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
     public class SendMessageCommandHandler :IRequestHandler<SendMessageCommand, Guid>
     {
         private readonly IVerbumDbContext _dbContext;
-        private readonly VerbumHubRepository _verbumHubRepository; 
+        private readonly VerbumHubRepository _verbumHubRepository;
+        private readonly CommonRepository _commonRepository;
 
-        public SendMessageCommandHandler(IVerbumDbContext dbContext, VerbumHubRepository hubContext) =>
-            (_dbContext, _verbumHubRepository) = (dbContext, hubContext);
+        public SendMessageCommandHandler(IVerbumDbContext dbContext, VerbumHubRepository hubContext,
+             CommonRepository commonRepository) =>
+            (_dbContext, _verbumHubRepository, _commonRepository) = (dbContext, hubContext, commonRepository);
 
         public async Task<Guid> Handle(SendMessageCommand request, CancellationToken
             cancellationToken)
         {
+            await _commonRepository.IsUserInBlackList(request.UserId, request.Seller);
+
             var message = new Messages
             {
                 Id = request.Id,
