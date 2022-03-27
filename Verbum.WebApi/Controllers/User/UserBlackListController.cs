@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.BlockedUsers.Commands.BlockUser;
 using Verbum.Application.Verbum.BlockedUsers.Commands.UnBlockUser;
+using Verbum.Application.Verbum.BlockedUsers.Queries.IsUserBlockedMe;
 
 namespace Verbum.WebApi.Controllers.User
 {
@@ -36,6 +36,22 @@ namespace Verbum.WebApi.Controllers.User
             await Mediator.Send(command);
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<isBlockedVm>> IsUserBlockMe(Guid id) {
+            
+            var query = new IsUserBlockedMeQuery
+            {
+                CheckUserId = id,
+                UserId = UserId
+            };
+
+            var vm = await Mediator.Send(query);
+
+            return Ok(vm);
+        
         }
 
     }

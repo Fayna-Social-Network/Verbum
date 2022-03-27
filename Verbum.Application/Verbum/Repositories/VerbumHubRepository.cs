@@ -67,5 +67,17 @@ namespace Verbum.Application.Verbum.Repositories
                 }
             }
         }
+
+        public async Task NotificateUserForBlocking(Guid UserId, Guid blockingId) {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == UserId);
+
+            if (user != null) {
+                if (user.IsOnline) {
+                    if (user.HubConnectionId != null) {
+                        await _hubContext.Clients.Client(user.HubConnectionId).SendAsync("youAreBlocked", blockingId);
+                    }
+                }
+            }
+        } 
     }
 }

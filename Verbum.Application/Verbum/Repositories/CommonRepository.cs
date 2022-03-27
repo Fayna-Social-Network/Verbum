@@ -25,5 +25,33 @@ namespace Verbum.Application.Verbum.Repositories
             }
 
         }
+
+        public async Task DeletingContactsWhenBlockingUser(Guid blockUserId, Guid UserId, CancellationToken cancellationToken) {
+          var blockUserContacts = await _dbContext.UserContacts.Where(b => b.UserId == blockUserId).ToListAsync();
+
+            if (blockUserContacts != null) {
+                foreach (var contact in blockUserContacts) {
+                    if (contact.Contact == UserId) {
+                        _dbContext.UserContacts.Remove(contact);
+                        await _dbContext.SaveChangesAsync(cancellationToken);
+                    }
+                }
+            }
+
+           
+
+            var UserContacts = await _dbContext.UserContacts.Where(c => c.UserId == UserId).ToListAsync();
+
+            if (UserContacts != null) {
+                foreach (var contact in UserContacts) {
+                    if (contact.Contact == blockUserId) {
+                        _dbContext.UserContacts.Remove(contact);
+                        await _dbContext.SaveChangesAsync(cancellationToken);
+                    }
+                }
+            }
+
+           
+        }
     }
 }

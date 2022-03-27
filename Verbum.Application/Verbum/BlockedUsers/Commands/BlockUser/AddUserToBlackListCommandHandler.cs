@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
+using Verbum.Application.Verbum.Repositories;
 using Verbum.Domain;
 
 namespace Verbum.Application.Verbum.BlockedUsers.Commands.BlockUser
@@ -10,8 +11,11 @@ namespace Verbum.Application.Verbum.BlockedUsers.Commands.BlockUser
     {
 
         private readonly IVerbumDbContext _dbContext;
+        private readonly CommonRepository _commonRepository;
+        private readonly VerbumHubRepository _verbumHubRepository;
 
-        public AddUserToBlackListCommandHandler(IVerbumDbContext verbumDb) => _dbContext = verbumDb;
+        public AddUserToBlackListCommandHandler(IVerbumDbContext verbumDb, CommonRepository common, VerbumHubRepository verbumHub) => 
+            (_dbContext, _commonRepository, _verbumHubRepository) = (verbumDb, common, verbumHub);
 
         public async Task<Guid> Handle(AddUserToBlackListCommand request, CancellationToken cancellationToken) {
 
@@ -26,15 +30,8 @@ namespace Verbum.Application.Verbum.BlockedUsers.Commands.BlockUser
                 throw new NotFoundException(nameof(VerbumUser), request.UserId);
             }
 
-            var blockUserContacts = await _dbContext.UserContacts.Where(c => c.GroupId == request.UserToBlockId).ToListAsync();
+            await _commonRepository.DeletingContactsWhenBlockingUser(request.UserToBlockId, request.UserId, cancellationToken);
 
-            if (blockUserContacts != null) {
-                foreach (var contact in blockUserContacts) {
-                    if (contact.Contact == request.UserId) {
-                        _dbContext.UserContacts.Remove(contact);
-                    }
-                }
-            }
 
             var UserToBlackList = new UserBlackList
             {
@@ -46,6 +43,8 @@ namespace Verbum.Application.Verbum.BlockedUsers.Commands.BlockUser
             await _dbContext.UserBlackLists.AddAsync(UserToBlackList);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            await _verbumHubRepository.NotificateUserForBlocking(request.UserToBlockId, request.UserId);
 
             return UserToBlackList.Id;
         }
