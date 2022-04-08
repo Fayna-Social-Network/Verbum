@@ -18,4 +18,4 @@ namespace Verbum.Domain.MessagesDb
         public AudioMessage? AudioMessage { get; set; }
         public VideoMessage? VideoMessage { get; set; } 
     }
-}
+} 
