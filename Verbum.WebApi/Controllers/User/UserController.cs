@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.Users.Commands.UpdateUserCommand;
 using Verbum.Application.Verbum.Users.Queries.GetAllUserQuery;
 using Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery;
+using Verbum.Application.Verbum.Users.Queries.GetUserById;
 using Verbum.Application.Verbum.Users.Queries.GetUsersByCountAndPage;
 using Verbum.Application.Verbum.Users.Queries.SearchUsersByNickName;
+using Verbum.Domain;
 using Verbum.WebApi.Models;
 
 namespace Verbum.WebApi.Controllers
@@ -77,8 +79,21 @@ namespace Verbum.WebApi.Controllers
             };
             var vm = await Mediator.Send(query);
             return Ok(vm);
-        } 
+        }
 
 
+
+        [HttpGet("byId/{userId}")]
+        [Authorize]
+        public async Task<ActionResult<VerbumUser>> GetUserById(Guid userId) {
+            var query = new GetUserByIdQuery
+            {
+                UserId = userId
+            };
+
+            var vm = await Mediator.Send(query);
+
+            return Ok(vm);
+        }
     }
 }

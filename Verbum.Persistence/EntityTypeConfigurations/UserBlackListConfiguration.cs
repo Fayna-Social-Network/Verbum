@@ -9,7 +9,6 @@ namespace Verbum.Persistence.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<UserBlackList> builder) {
             builder.HasOne<VerbumUser>(a => a.BlockUser)
                 .WithMany(d => d.UserBlackLists)
-                .HasForeignKey(a => a.Contact)
                 .HasForeignKey(a => a.UserId);
         }
     }

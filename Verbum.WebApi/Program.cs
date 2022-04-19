@@ -74,11 +74,12 @@ app.UseStaticFiles(new StaticFileOptions
 
 
 app.UseCors(x => x
-        .WithOrigins("http://localhost:8080")
+        .WithOrigins("http://localhost:8080", "https://localhost:8080")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true)
         .AllowCredentials());
+        
 
 app.UseSwagger();
 app.UseSwaggerUI(

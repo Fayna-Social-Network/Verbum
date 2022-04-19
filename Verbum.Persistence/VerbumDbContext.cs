@@ -2,6 +2,7 @@
 using Verbum.Application.Interfaces;
 using Verbum.Domain;
 using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Stikers;
 using Verbum.Domain.Users;
 using Verbum.Domain.Users.Details;
 using Verbum.Persistence.EntityTypeConfigurations;
@@ -27,6 +28,9 @@ namespace Verbum.Persistence
         public DbSet<UserAdress> userAdresses { get; set; } = null!;
         public DbSet<UserDetails> userDetails { get; set; } = null!;
         public DbSet<ContactGroup> contactGroups { get; set; } = null!;
+
+        public DbSet<Sticker> Stickers { get; set; } = null!;
+        public DbSet<StickersGroup> stickersGroups { get; set; } = null!;
        
 
         public VerbumDbContext(DbContextOptions<VerbumDbContext> options)
