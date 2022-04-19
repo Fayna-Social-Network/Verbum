@@ -79,6 +79,7 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true)
         .AllowCredentials());
+        
 
 app.UseSwagger();
 app.UseSwaggerUI(

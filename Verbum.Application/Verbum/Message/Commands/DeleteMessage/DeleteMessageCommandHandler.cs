@@ -60,7 +60,17 @@ namespace Verbum.Application.Verbum.Commands.DeleteMessage
                     }
                 }
             }
-            
+
+            var video = await _dbContext.videoMessages.SingleOrDefaultAsync(a => a.MessageId == messageId);
+            if (video != null)
+            {
+                var videos = await _dbContext.videoMessages.Where(a => a.Path == video.Path).ToListAsync();
+                if (videos.Count == 1)
+                {
+                    _filesRepository.Delete(video.Path!);
+                }
+            }
+
         }
         
     }

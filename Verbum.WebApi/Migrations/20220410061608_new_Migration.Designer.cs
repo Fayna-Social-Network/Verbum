@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Verbum.Persistence;
@@ -11,9 +12,10 @@ using Verbum.Persistence;
 namespace Verbum.WebApi.Migrations
 {
     [DbContext(typeof(VerbumDbContext))]
-    partial class VerbumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220410061608_new_Migration")]
+    partial class new_Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

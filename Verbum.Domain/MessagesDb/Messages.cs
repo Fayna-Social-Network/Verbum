@@ -14,7 +14,7 @@ namespace Verbum.Domain.MessagesDb
 
         public virtual ICollection<MessageReaction>? MessageReactions { get; set; }
         public ImageAlbum? ImageAlbum { get; set; }
-        public virtual ICollection<FileMessage>? FileMessages { get; set; }
+        public FileMessage? FileMessage { get; set; }
         public AudioMessage? AudioMessage { get; set; }
         public VideoMessage? VideoMessage { get; set; } 
     }

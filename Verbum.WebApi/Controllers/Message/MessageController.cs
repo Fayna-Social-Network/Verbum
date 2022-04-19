@@ -8,6 +8,7 @@ using Verbum.Application.Verbum.Message.Commands.SetMessageIsRead;
 using Verbum.Application.Verbum.Message.Queries.GetCorrespondence;
 using Verbum.Application.Verbum.Message.Queries.GetCorrespondenceWithUnknowContact;
 using Verbum.Application.Verbum.Message.Queries.GetMessageById;
+using Verbum.Application.Verbum.Message.Queries.GetUnreadMessageCounter;
 using Verbum.Domain.MessagesDb;
 using Verbum.WebApi.Models;
 
@@ -109,6 +110,22 @@ namespace Verbum.WebApi.Controllers
 
             var result = await Mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpGet("getCountUnreadMessage/{contactId}")]
+        [Authorize]
+        public async Task<ActionResult<int>> GetUnreadMessageCount(Guid contactId) {
+            
+            var query = new GetUnreadMessageCounterQuery {
+                
+                ContactId = contactId,
+                UserId = UserId
+            
+            };
+
+            var vm = await Mediator.Send(query);
+            return Ok(vm);
+            
         }
 
         //[HttpPut]

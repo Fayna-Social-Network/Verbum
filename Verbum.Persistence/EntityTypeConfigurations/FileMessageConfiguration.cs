@@ -9,8 +9,8 @@ namespace Verbum.Persistence.EntityTypeConfigurations
         public void Configure(EntityTypeBuilder<FileMessage> builder)
         {
             builder.HasOne<Messages>(m => m.Message)
-                .WithMany(f => f.FileMessages)
-                .HasForeignKey(m => m.MessageId);
+                .WithOne(f => f.FileMessage)
+                .HasForeignKey<FileMessage>(f => f.MessageId);
         }
     }
 }

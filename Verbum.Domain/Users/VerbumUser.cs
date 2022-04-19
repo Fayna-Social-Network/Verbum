@@ -22,5 +22,6 @@ namespace Verbum.Domain
         public virtual ICollection<UserBlackList>? UserBlackLists { get; set; }
         public ICollection<ContactGroup>? ContactGroups { get; set; }
         public ICollection<StickersGroup>? stickersGroups { get; set; }
+        public ICollection<FileMessage>? fileMessages { get; set; }
     }
 }
