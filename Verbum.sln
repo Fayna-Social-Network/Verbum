@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verbum.WebApi", "Verbum.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Test", "Messages.Test\Messages.Test.csproj", "{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fayna Admin Panel", "Fayna Admin Panel\Fayna Admin Panel.csproj", "{2BD09A0C-18E5-48C8-8D9D-72D45C9B9C13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F62E0CDA-BCDC-4FB2-97C3-EF641D9DF492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD09A0C-18E5-48C8-8D9D-72D45C9B9C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD09A0C-18E5-48C8-8D9D-72D45C9B9C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD09A0C-18E5-48C8-8D9D-72D45C9B9C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD09A0C-18E5-48C8-8D9D-72D45C9B9C13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

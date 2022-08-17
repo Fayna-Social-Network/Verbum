@@ -39,7 +39,16 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
-builder.Services.AddCors();
+
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://localhost:8080")
+              .AllowCredentials()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    }); 
+});
 
 builder.Services.AddAuthentication(config =>
 {
@@ -73,12 +82,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
-app.UseCors(x => x
-        .WithOrigins("http://localhost:8080", "https://localhost:8080")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .SetIsOriginAllowed(origin => true)
-        .AllowCredentials());
+
         
 
 app.UseSwagger();
@@ -105,6 +109,8 @@ app.UseApiVersioning();
 app.UseAuthentication();
 app.UseRouting();
 
+app.UseCors();
+
 app.UseAuthorization();
 
 
@@ -130,6 +136,8 @@ using (var scope = app.Services.CreateScope()) {
         Console.WriteLine(ex);
     }
 }
+
+
 
 app.Run();
 
