@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace Fayna.AdminPanel.Models
 {
-    public partial class StickersGroup
+    public partial class ContactGroup
     {
-        public StickersGroup()
+        public ContactGroup()
         {
-            Stickers = new HashSet<Sticker>();
+            UserContacts = new HashSet<UserContact>();
             VerbumUsers = new HashSet<User>();
         }
 
         public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string? GroupName { get; set; }
 
-        public virtual ICollection<Sticker> Stickers { get; set; }
+        public virtual ICollection<UserContact> UserContacts { get; set; }
 
         public virtual ICollection<User> VerbumUsers { get; set; }
     }
