@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("cat", 0);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.StickersDataGridView = new System.Windows.Forms.DataGridView();
+            this.StickerId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StickerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StickerPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
             this.StickersApplyButton = new System.Windows.Forms.Button();
             this.StickersDeleteImageButton = new System.Windows.Forms.Button();
             this.StickersAddImageButton = new System.Windows.Forms.Button();
@@ -40,10 +42,11 @@
             this.StickersAddGroupButton = new System.Windows.Forms.Button();
             this.StickersImagesLabel = new System.Windows.Forms.Label();
             this.StickersGroupsLabel = new System.Windows.Forms.Label();
-            this.StikersPictureListView = new System.Windows.Forms.ListView();
-            this.StickersImageList = new System.Windows.Forms.ImageList(this.components);
             this.StickersGroupsListBox = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.SettingsServerUrlGroupBox = new System.Windows.Forms.GroupBox();
+            this.SettingsServerUrlSaveButton = new System.Windows.Forms.Button();
+            this.SettingsServerUrlTextBox = new System.Windows.Forms.TextBox();
             this.DatabaseConnectionGroupBox = new System.Windows.Forms.GroupBox();
             this.SettingsDbConnectButton = new System.Windows.Forms.Button();
             this.SettingsDbPasswordTextBox = new System.Windows.Forms.TextBox();
@@ -58,10 +61,11 @@
             this.SettingHostTextBox = new System.Windows.Forms.TextBox();
             this.SettingDbHostLabel = new System.Windows.Forms.Label();
             this.StickersOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StickersDataGridView)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.SettingsServerUrlGroupBox.SuspendLayout();
             this.DatabaseConnectionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,6 +81,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.StickersDataGridView);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.StickersApplyButton);
             this.tabPage1.Controls.Add(this.StickersDeleteImageButton);
@@ -85,7 +90,6 @@
             this.tabPage1.Controls.Add(this.StickersAddGroupButton);
             this.tabPage1.Controls.Add(this.StickersImagesLabel);
             this.tabPage1.Controls.Add(this.StickersGroupsLabel);
-            this.tabPage1.Controls.Add(this.StikersPictureListView);
             this.tabPage1.Controls.Add(this.StickersGroupsListBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
@@ -95,6 +99,43 @@
             this.tabPage1.Text = "Stickers";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // StickersDataGridView
+            // 
+            this.StickersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.StickersDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.StickerId,
+            this.StickerName,
+            this.StickerPath});
+            this.StickersDataGridView.Location = new System.Drawing.Point(291, 40);
+            this.StickersDataGridView.Name = "StickersDataGridView";
+            this.StickersDataGridView.RowTemplate.Height = 25;
+            this.StickersDataGridView.Size = new System.Drawing.Size(460, 334);
+            this.StickersDataGridView.TabIndex = 10;
+            // 
+            // StickerId
+            // 
+            this.StickerId.HeaderText = "Id";
+            this.StickerId.Name = "StickerId";
+            // 
+            // StickerName
+            // 
+            this.StickerName.HeaderText = "Name";
+            this.StickerName.Name = "StickerName";
+            // 
+            // StickerPath
+            // 
+            this.StickerPath.HeaderText = "Path";
+            this.StickerPath.Name = "StickerPath";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(278, 378);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 15);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "label1";
+            // 
             // StickersApplyButton
             // 
             this.StickersApplyButton.Location = new System.Drawing.Point(632, 6);
@@ -103,6 +144,7 @@
             this.StickersApplyButton.TabIndex = 8;
             this.StickersApplyButton.Text = "Apply";
             this.StickersApplyButton.UseVisualStyleBackColor = true;
+            this.StickersApplyButton.Click += new System.EventHandler(this.StickersApplyButton_Click);
             // 
             // StickersDeleteImageButton
             // 
@@ -131,6 +173,7 @@
             this.StickerDeleteGroupButton.TabIndex = 5;
             this.StickerDeleteGroupButton.Text = "Del";
             this.StickerDeleteGroupButton.UseVisualStyleBackColor = true;
+            this.StickerDeleteGroupButton.Click += new System.EventHandler(this.StickerDeleteGroupButton_Click);
             // 
             // StickersAddGroupButton
             // 
@@ -160,28 +203,6 @@
             this.StickersGroupsLabel.TabIndex = 2;
             this.StickersGroupsLabel.Text = "Groups:";
             // 
-            // StikersPictureListView
-            // 
-            this.StikersPictureListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.StikersPictureListView.LargeImageList = this.StickersImageList;
-            this.StikersPictureListView.Location = new System.Drawing.Point(291, 40);
-            this.StikersPictureListView.Name = "StikersPictureListView";
-            this.StikersPictureListView.Size = new System.Drawing.Size(457, 334);
-            this.StikersPictureListView.SmallImageList = this.StickersImageList;
-            this.StikersPictureListView.TabIndex = 1;
-            this.StikersPictureListView.UseCompatibleStateImageBehavior = false;
-            // 
-            // StickersImageList
-            // 
-            this.StickersImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.StickersImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("StickersImageList.ImageStream")));
-            this.StickersImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.StickersImageList.Images.SetKeyName(0, "1.gif");
-            this.StickersImageList.Images.SetKeyName(1, "2.gif");
-            this.StickersImageList.Images.SetKeyName(2, "3.gif");
-            this.StickersImageList.Images.SetKeyName(3, "4.gif");
-            // 
             // StickersGroupsListBox
             // 
             this.StickersGroupsListBox.FormattingEnabled = true;
@@ -190,9 +211,11 @@
             this.StickersGroupsListBox.Name = "StickersGroupsListBox";
             this.StickersGroupsListBox.Size = new System.Drawing.Size(256, 334);
             this.StickersGroupsListBox.TabIndex = 0;
+            this.StickersGroupsListBox.SelectedIndexChanged += new System.EventHandler(this.StickersGroupsListBox_SelectedIndexChanged);
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.SettingsServerUrlGroupBox);
             this.tabPage2.Controls.Add(this.DatabaseConnectionGroupBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
@@ -201,6 +224,33 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsServerUrlGroupBox
+            // 
+            this.SettingsServerUrlGroupBox.Controls.Add(this.SettingsServerUrlSaveButton);
+            this.SettingsServerUrlGroupBox.Controls.Add(this.SettingsServerUrlTextBox);
+            this.SettingsServerUrlGroupBox.Location = new System.Drawing.Point(314, 6);
+            this.SettingsServerUrlGroupBox.Name = "SettingsServerUrlGroupBox";
+            this.SettingsServerUrlGroupBox.Size = new System.Drawing.Size(278, 100);
+            this.SettingsServerUrlGroupBox.TabIndex = 1;
+            this.SettingsServerUrlGroupBox.TabStop = false;
+            this.SettingsServerUrlGroupBox.Text = "Server Url:";
+            // 
+            // SettingsServerUrlSaveButton
+            // 
+            this.SettingsServerUrlSaveButton.Location = new System.Drawing.Point(197, 71);
+            this.SettingsServerUrlSaveButton.Name = "SettingsServerUrlSaveButton";
+            this.SettingsServerUrlSaveButton.Size = new System.Drawing.Size(75, 23);
+            this.SettingsServerUrlSaveButton.TabIndex = 1;
+            this.SettingsServerUrlSaveButton.Text = "Save";
+            this.SettingsServerUrlSaveButton.UseVisualStyleBackColor = true;
+            // 
+            // SettingsServerUrlTextBox
+            // 
+            this.SettingsServerUrlTextBox.Location = new System.Drawing.Point(6, 30);
+            this.SettingsServerUrlTextBox.Name = "SettingsServerUrlTextBox";
+            this.SettingsServerUrlTextBox.Size = new System.Drawing.Size(266, 23);
+            this.SettingsServerUrlTextBox.TabIndex = 0;
             // 
             // DatabaseConnectionGroupBox
             // 
@@ -329,15 +379,7 @@
             // 
             this.StickersOpenFileDialog.FileName = "*.gif";
             this.StickersOpenFileDialog.Multiselect = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(278, 378);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "label1";
+            this.StickersOpenFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.StickersOpenFileDialog_FileOk);
             // 
             // Form1
             // 
@@ -346,12 +388,16 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fayna Admin Panel";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.StickersDataGridView)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.SettingsServerUrlGroupBox.ResumeLayout(false);
+            this.SettingsServerUrlGroupBox.PerformLayout();
             this.DatabaseConnectionGroupBox.ResumeLayout(false);
             this.DatabaseConnectionGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -382,11 +428,16 @@
         private Button StickersAddGroupButton;
         private Label StickersImagesLabel;
         private Label StickersGroupsLabel;
-        private ListView StikersPictureListView;
         private ListBox StickersGroupsListBox;
-        private ImageList StickersImageList;
         private OpenFileDialog StickersOpenFileDialog;
         private Button SettingsDbConnectButton;
         private Label label1;
+        private DataGridView StickersDataGridView;
+        private DataGridViewTextBoxColumn StickerId;
+        private DataGridViewTextBoxColumn StickerName;
+        private DataGridViewTextBoxColumn StickerPath;
+        private GroupBox SettingsServerUrlGroupBox;
+        private Button SettingsServerUrlSaveButton;
+        private TextBox SettingsServerUrlTextBox;
     }
 }

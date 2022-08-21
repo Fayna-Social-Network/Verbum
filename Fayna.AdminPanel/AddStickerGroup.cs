@@ -28,11 +28,12 @@ namespace Fayna.AdminPanel
             if (!String.IsNullOrEmpty(result))
             {
                 VerbumDbContext _dbContext = new VerbumDbContext();
-                Form1 MainForm = new Form1();
+                //InProgress progress = new InProgress();
 
                 string GroupName = AddStickerGroupTextBox.Text;
 
                 AddStickersGroupPanel.Visible = false;
+               // progress.ShowDialog();
 
                 try
                 {
@@ -46,7 +47,7 @@ namespace Fayna.AdminPanel
                     await _dbContext.SaveChangesAsync();
                     groups.Add(stickersGroup);
                     listBox.Items.Add(stickersGroup.Name);
-                 
+                    //progress.Close();
                     MessageBox.Show("Sticker Group Saved Successfully!!!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Close();
                 }

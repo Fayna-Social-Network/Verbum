@@ -4,7 +4,7 @@
     {
         public async Task<string> UploadAvatar(IFormFile file)
         {
-            var folderName = Path.Combine("Resources", "Images");
+            var folderName = Path.Combine("Resources", "Avatars");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             var fileName = Path.GetRandomFileName() + file.FileName;
             var dbPath = Path.Combine(folderName, fileName);

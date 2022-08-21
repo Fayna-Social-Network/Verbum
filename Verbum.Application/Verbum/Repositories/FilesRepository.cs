@@ -83,5 +83,32 @@ namespace Verbum.Application.Verbum.Repositories
             }
             return fileName;
         }
+
+        public async Task<string> UploadSticker(IFormFile stickerFile, string groupName) 
+        {
+            var folder = Path.Combine("Resources", "stickers");
+            var folderName = Path.Combine(folder, groupName);
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var fileName = GetFileName(groupName, stickerFile);
+            var dbPath = Path.Combine(folderName, fileName);
+            var fullPath = Path.Combine(pathToSave, fileName);
+
+            if (!System.IO.Directory.Exists(pathToSave))//create path 
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+
+
+            if (stickerFile != null)
+            {
+
+                using (var stream = System.IO.File.Create(fullPath))
+                {
+                    await stickerFile.CopyToAsync(stream);
+                }
+                return dbPath;
+            }
+            throw new Exception();
+        } 
     }
 }

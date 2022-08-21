@@ -43,8 +43,13 @@ namespace Verbum.WebApi.Controllers
             return Ok(result);
         }
 
-       
-       
+        [HttpPost("sticker/{groupName}")]
+        public async Task<ActionResult<string>> UploadSticker(IFormFile stickerFile, string groupName) 
+        {
+            var path = await _filesRepository.UploadSticker(stickerFile, groupName);
+
+            return Ok(path);
+        }
 
     }
 }
