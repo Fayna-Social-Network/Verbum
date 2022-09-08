@@ -56,6 +56,7 @@ namespace Fayna.AdminPanel.UploadSticker
                 Name = Name,
                 Path = responseContent,
                 StickerGroupId = groupId,
+                StickersGroupId = groupId
             };
 
             return sticker;
