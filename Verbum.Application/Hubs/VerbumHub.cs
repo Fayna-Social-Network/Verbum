@@ -75,5 +75,70 @@ namespace Verbum.Application.Hubs
             }
 
         }
+
+        public async Task CallToUser(CallToUserDto dto) 
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.Id == dto.UserToCall);
+
+            if (user != null) {
+                if (user.IsOnline) 
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("UserCalling", 
+                        new UserCallingDto { UserNickname = dto.FromUserNickname, SignalData = dto.SignalData, CallType = dto.CallType });
+                }
+            }
+        }
+
+        public async Task AnswerToUserCall(AnswerToCallDto dto) 
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == dto.UserNickname);
+
+            if (user != null) {
+                if (user.IsOnline) {
+                    await Clients.Client(user.HubConnectionId).SendAsync("UserAnswerToCall", dto.Signal);
+                }
+            }
+        }
+
+        public async Task SetOfferIceCandidate(SetIceCandidateDto dto) {
+           
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == dto.UserNickname);
+
+            if (user != null)
+            {
+                if (user.IsOnline)
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("OfferIceCandidate", dto.IceCandidate);
+                }
+            }
+        }
+
+
+        public async Task SetAnswerIceCandidate(SetIceCandidateDto dto)
+        {
+
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == dto.UserNickname);
+
+            if (user != null)
+            {
+                if (user.IsOnline)
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("AnswerIceCandidate", dto.IceCandidate);
+                }
+            }
+        }
+
+        public async Task UserCancelCall(string NickName) 
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == NickName);
+
+            if (user != null) 
+            {
+                if (user.IsOnline) 
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("CanselingCall");
+                }
+            }
+        }
     }
 }
