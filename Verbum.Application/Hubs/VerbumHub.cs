@@ -6,7 +6,7 @@ using Verbum.Domain.MessagesDb;
 
 namespace Verbum.Application.Hubs
 {
-    public class VerbumHub :Hub
+    public class VerbumHub : Hub
     {
         private readonly IVerbumDbContext _dbContext;
 
@@ -46,7 +46,7 @@ namespace Verbum.Application.Hubs
             var user = await _dbContext.Users.SingleAsync(u => u.Id == dto.User);
             if (user != null) {
                 if (user.IsOnline) {
-                    await Clients.Client(user.HubConnectionId).SendAsync("TypingMessage",  dto.FromWho);
+                    await Clients.Client(user.HubConnectionId).SendAsync("TypingMessage", dto.FromWho);
                 }
             }
         }
@@ -76,6 +76,36 @@ namespace Verbum.Application.Hubs
 
         }
 
+
+        public async Task AskTheUserForCall(AskUserForCallDto dto) 
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == dto.UserNickname);
+
+            if (user != null) 
+            {
+                if (user.IsOnline) 
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("UserAskForCall", 
+                        new AskForCallReceivedto {UserNickname = dto.MyNickname, CallType = dto.CallType });
+                }
+            }
+        }
+
+        public async Task UserConfirmedCall(string Nickname) 
+        {
+            
+            var user = await _dbContext.Users.SingleAsync(i => i.NickName == Nickname);
+
+            if (user != null)
+            {
+                if (user.IsOnline)
+                {
+                    await Clients.Client(user.HubConnectionId).SendAsync("CallConfirmed");
+                }
+            }
+
+        }
+
         public async Task CallToUser(CallToUserDto dto) 
         {
             var user = await _dbContext.Users.SingleAsync(i => i.Id == dto.UserToCall);
@@ -83,8 +113,7 @@ namespace Verbum.Application.Hubs
             if (user != null) {
                 if (user.IsOnline) 
                 {
-                    await Clients.Client(user.HubConnectionId).SendAsync("UserCalling", 
-                        new UserCallingDto { UserNickname = dto.FromUserNickname, SignalData = dto.SignalData, CallType = dto.CallType });
+                    await Clients.Client(user.HubConnectionId).SendAsync("UserCalling", dto.SignalData);
                 }
             }
         }
