@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-
+using System.IO.Compression;
 
 namespace Verbum.Application.Verbum.Repositories
 {
@@ -32,11 +32,10 @@ namespace Verbum.Application.Verbum.Repositories
             throw new Exception();
         }
 
-        public async Task<List<string>> Uploads(IFormFileCollection uploads, string type, Guid UserId) {
-            List<string> files = new List<string>();
-
+        public async Task<string> ToArchive(IFormFileCollection uploads, Guid UserId) {
+           
             var folder = Path.Combine("Resources", UserId.ToString());
-            var folderName = Path.Combine(folder, type);
+            var folderName = Path.Combine(folder, "user_files");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
             if (!System.IO.Directory.Exists(pathToSave))//create path 
@@ -44,23 +43,44 @@ namespace Verbum.Application.Verbum.Repositories
                 Directory.CreateDirectory(pathToSave);
             }
 
-            foreach (var uploadedFile in uploads)
+            var fileName = Path.GetRandomFileName() + ".zip";
+            var dbPath = Path.Combine(folderName, fileName);
+            var fullPath = Path.Combine(pathToSave, fileName);
+
+            using (FileStream fs = new FileStream(fullPath, FileMode.OpenOrCreate))
             {
-                var fileName = Path.GetRandomFileName() + uploadedFile.FileName;
-                var dbPath = Path.Combine(folderName, fileName);
-                var fullPath = Path.Combine(pathToSave, fileName);
-
-
-
-                using (var stream = System.IO.File.Create(fullPath))
+                using (var zipArchive = new ZipArchive(fs, ZipArchiveMode.Create, true))
                 {
-                    await uploadedFile.CopyToAsync(stream);
+                    foreach (var file in uploads)
+                    {
+                        var entry = zipArchive.CreateEntry(file.FileName, CompressionLevel.Fastest);
+                        
+                        using (var entryStream = entry.Open())
+                        {
+                            file.CopyTo(entryStream);
+                        }
+                    }
                 }
-                files.Add(dbPath);
             }
 
 
-            return files;
+            //foreach (var uploadedFile in uploads)
+            //{
+            //    var fileName = Path.GetRandomFileName() + uploadedFile.FileName;
+            //    var dbPath = Path.Combine(folderName, fileName);
+            //    var fullPath = Path.Combine(pathToSave, fileName);
+
+
+
+            //    using (var stream = System.IO.File.Create(fullPath))
+            //    {
+            //        await uploadedFile.CopyToAsync(stream);
+            //    }
+            //    files.Add(dbPath);
+            //}
+
+
+            return "djh";
         }
 
         public string Delete(string Dbpath) {

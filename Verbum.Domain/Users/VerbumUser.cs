@@ -23,5 +23,6 @@ namespace Verbum.Domain
         public ICollection<ContactGroup>? ContactGroups { get; set; }
         public ICollection<StickersGroup>? stickersGroups { get; set; }
         public ICollection<FileMessage>? fileMessages { get; set; }
+        //public ICollection<Group>? groups { get; set; }
     }
 }

@@ -24,13 +24,14 @@ namespace Verbum.WebApi.Controllers
 
 
         [Authorize]
-        [HttpPost("many/{type}")]
+        [HttpPost("archive")]
         [RequestSizeLimit(900_000_000)]
-        public async Task<ActionResult<List<string>>> AddFiles(IFormFileCollection uploads, string type)
+        public async Task<ActionResult<string>> UploadFilesAndAddToArchive()
         {
-            var files = await _filesRepository.Uploads(uploads, type, UserId);
+            var files = this.Request.Form.Files;
+            var archiveFilePath = await _filesRepository.ToArchive(files, UserId);
 
-            return Ok(files);
+            return Ok(archiveFilePath);
         }
 
 
@@ -50,6 +51,22 @@ namespace Verbum.WebApi.Controllers
 
             return Ok(path);
         }
+
+        //[HttpPost("quasarUpload")]
+        //public async Task<ActionResult> QuasarFilesUpload() 
+        //{
+        //   var files = this.Request.Form.Files;
+        //   foreach (var file in files)
+        //   {
+        //      if (file == null || file.Length == 0)
+        //         continue;
+              
+        //        var fileName = file.FileName;
+        //        var fileSize = file.Length;
+                    
+        //   }
+        //    return Ok();
+        //}
 
     }
 }
