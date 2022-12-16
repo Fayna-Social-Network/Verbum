@@ -11,6 +11,14 @@ namespace Verbum.Persistence.EntityTypeConfigurations
             builder.HasOne(m => m.Message)
                 .WithOne(s => s.ImageAlbum)
                 .HasForeignKey<ImageAlbum>(i => i.MessageId);
+
+            builder.HasOne(m => m.groupMessage)
+               .WithOne(a => a.ImageAlbum)
+               .HasForeignKey<ImageAlbum>(a => a.GroupMessageId);
+
+            builder.HasOne(m => m.GroupMessageComment)
+                .WithOne(a => a.ImageAlbum)
+                .HasForeignKey<ImageAlbum>(a => a.GroupCommentId);
         }
     }
 }

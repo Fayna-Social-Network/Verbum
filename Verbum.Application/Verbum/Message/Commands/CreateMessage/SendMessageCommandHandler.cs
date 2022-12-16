@@ -5,6 +5,7 @@ using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
 using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
 {
@@ -33,6 +34,25 @@ namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
                 UserId = request.UserId
             };
 
+            bool isUserInContact = await _commonRepository.IsUserIsFriends(request.UserId, request.Seller);
+
+            if (isUserInContact == false) 
+            {
+                var notify = new Notification
+                {
+                    Id = Guid.NewGuid(),
+                    Type = "message",
+                    Author = request.Seller,
+                    Message = request.Text,
+                    ObjectId = message.Id,
+                    isRead = false,
+                    timestamp = DateTime.UtcNow,
+                    UserId = request.UserId
+                };
+
+               await _verbumHubRepository.SendNotificationToUser(notify);
+               await _dbContext.notifications.AddAsync(notify); 
+            }
 
             await _verbumHubRepository.NotificateUserForMessage(message);
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
 using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Verbum.Repositories
 {
@@ -78,6 +79,19 @@ namespace Verbum.Application.Verbum.Repositories
                     }
                 }
             }
-        } 
+        }
+
+        public async Task SendNotificationToUser(Notification notification)
+        {
+            var user = await _dbContext.Users.SingleAsync(i => i.Id == notification.UserId);
+
+            if (user != null)
+            {
+                if (user.IsOnline)
+                {
+                    await _hubContext.Clients.Client(user.HubConnectionId).SendAsync("Notification", notification);
+                }
+            }
+        }
     }
 }

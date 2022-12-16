@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Domain;
+using Verbum.Domain.Groups.GroupsMessages;
+using Verbum.Domain.Groups.GroupsVotes;
 using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Notifications;
 using Verbum.Domain.Stikers;
 using Verbum.Domain.Users;
 using Verbum.Domain.Users.Details;
@@ -31,7 +34,16 @@ namespace Verbum.Persistence
 
         public DbSet<Sticker> Stickers { get; set; } = null!;
         public DbSet<StickersGroup> stickersGroups { get; set; } = null!;
-       
+
+        public DbSet<Group> groups { get; set; } = null!;
+        public DbSet<GroupMessages> groupMessages { get; set; } = null!;
+        public DbSet<GroupMessageComment> groupMessageComments { get; set; } = null!;
+        public DbSet<GroupsThemes> groupsThemes { get; set; } = null!;
+        public DbSet<GroupVote> groupVotes { get; set; } = null!;
+        public DbSet<VoteItem> voteItems { get; set; } = null!;
+
+        public DbSet<Notification> notifications { get; set; } = null!;
+
 
         public VerbumDbContext(DbContextOptions<VerbumDbContext> options)
             :base(options)
@@ -50,6 +62,12 @@ namespace Verbum.Persistence
             builder.ApplyConfiguration(new VideMessageConfiguration());
             builder.ApplyConfiguration(new ImageAlbumConfiguration());
             builder.ApplyConfiguration(new ContactGroupConfiguration());
+            builder.ApplyConfiguration(new GroupsConfiguration());
+            builder.ApplyConfiguration(new GroupsThemesConfiguration());
+            builder.ApplyConfiguration(new GroupsMessagesConfiguration());
+            builder.ApplyConfiguration(new GroupMessageCommentConfiguration());
+            builder.ApplyConfiguration(new GroupVoteConfiguration());
+            builder.ApplyConfiguration(new VoteItemConfiguration());
             base.OnModelCreating(builder);
         }
     }

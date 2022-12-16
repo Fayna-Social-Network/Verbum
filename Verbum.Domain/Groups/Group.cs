@@ -6,7 +6,7 @@ namespace Verbum.Domain
     public class Group
     {
         public Guid id { get; set; }
-        public string GroupName { get; set; } = string.Empty;
+        public string? GroupName { get; set; } 
         public bool isGroupClosed { get; set; }
         public bool isBlockedGroup { get; set; }
         public Guid UserId { get; set; }

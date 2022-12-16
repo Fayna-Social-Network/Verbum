@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Hubs.dtos;
 using Verbum.Application.Interfaces;
 using Verbum.Domain.MessagesDb;
+using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Hubs
 {
@@ -169,5 +170,7 @@ namespace Verbum.Application.Hubs
                 }
             }
         }
+
+        
     }
 }

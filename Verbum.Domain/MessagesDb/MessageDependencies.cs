@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Verbum.Domain.Groups.GroupsMessages;
 
 namespace Verbum.Domain.MessagesDb
 {
-    internal class MessageDependencies
+    public class MessageDependencies
     {
+        public Guid MessageId { get; set; }
+        public Messages? Message { get; set; }
+
+        public Guid GroupMessageId { get; set; }
+        public GroupMessages? groupMessage { get; set; }
+
+        public Guid GroupCommentId { get; set; }
+        public GroupMessageComment? GroupMessageComment { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace Verbum.Domain.Groups.GroupsMessages
         public Guid GroupThemeId { get; set; }
         public virtual GroupsThemes? GroupTheme { get; set; }
 
+        public Guid GroupVoteId { get; set; }
         public GroupVote? groupVote { get; set; }
         public ICollection<GroupMessageComment>? Comments { get; set; }
     }

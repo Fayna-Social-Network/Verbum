@@ -10,6 +10,14 @@ namespace Verbum.Persistence.EntityTypeConfigurations
             builder.HasOne(m => m.Message)
                 .WithOne(a => a.AudioMessage)
                 .HasForeignKey<AudioMessage>(a => a.MessageId);
+
+            builder.HasOne(m => m.groupMessage)
+                .WithOne(a => a.AudioMessage)
+                .HasForeignKey<AudioMessage>(a => a.GroupMessageId);
+
+            builder.HasOne(m => m.GroupMessageComment)
+                .WithOne(a => a.AudioMessage)
+                .HasForeignKey<AudioMessage>(a => a.GroupCommentId);
                 
         }
     }

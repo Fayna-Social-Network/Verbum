@@ -1,5 +1,6 @@
 ﻿using Verbum.Domain.MessagesDb;
 using Verbum.Domain.Stikers;
+using Verbum.Domain.Notifications;
 using Verbum.Domain.Users;
 
 namespace Verbum.Domain
@@ -23,6 +24,7 @@ namespace Verbum.Domain
         public ICollection<ContactGroup>? ContactGroups { get; set; }
         public ICollection<StickersGroup>? stickersGroups { get; set; }
         public ICollection<FileMessage>? fileMessages { get; set; }
-        //public ICollection<Group>? groups { get; set; }
+        public ICollection<Group>? groups { get; set; }
+        public ICollection<Notification>? notifications { get; set; }
     }
 }

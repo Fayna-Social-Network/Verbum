@@ -26,6 +26,25 @@ namespace Verbum.Application.Verbum.Repositories
 
         }
 
+        public async Task<bool> IsUserIsFriends(Guid UserId, Guid FriendId) 
+        {
+            var userFriends = await _dbContext.UserContacts.Where(u => u.UserId == UserId).ToListAsync();
+
+            if (userFriends != null) 
+            {
+                foreach (var friend in userFriends) 
+                {
+                    if(friend.Contact == FriendId) 
+                    {
+                        return true;
+                    }
+
+                }
+            }
+
+            return false;
+        }             
+
         public async Task DeletingContactsWhenBlockingUser(Guid blockUserId, Guid UserId, CancellationToken cancellationToken) {
           var blockUserContacts = await _dbContext.UserContacts.Where(b => b.UserId == blockUserId).ToListAsync();
 
