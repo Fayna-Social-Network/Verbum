@@ -47,12 +47,12 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
             {
                 Id = Guid.NewGuid(),
                 Type = "AddUserToContact",
-                Author = request.Contact,
+                Author = request.UserId,
                 Message = "User add you to contacts",
-                ObjectId = request.Contact,
+                ObjectId = request.UserId,
                 isRead = false,
                 timestamp = DateTime.UtcNow,
-                UserId = request.UserId
+                UserId = request.Contact
             };
 
             await _verbumHubRepository.SendNotificationToUser(notify);

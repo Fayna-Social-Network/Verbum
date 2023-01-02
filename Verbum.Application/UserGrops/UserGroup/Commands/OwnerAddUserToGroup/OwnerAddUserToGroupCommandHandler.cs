@@ -29,7 +29,7 @@ namespace Verbum.Application.UserGrops.UserGroup.Commands.OwnerAddUserToGroup
 
             if (group.UserId != request.OwnerGroupId) 
             {
-                throw new Exception("The user is not the owner of the group");
+                throw new UserIsNotOwnerException();
             }
 
             group.users?.Add(user);
