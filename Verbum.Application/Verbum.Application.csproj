@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UserGrops\UserGroup\Queries\" />
     <Folder Include="UserNotifications\" />
   </ItemGroup>
 
