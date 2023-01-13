@@ -83,7 +83,7 @@ namespace Verbum.Application.Verbum.Repositories
 
         public async Task SendNotificationToUser(Notification notification)
         {
-            var user = await _dbContext.Users.SingleAsync(i => i.Id == notification.UserId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == notification.UserId);
 
             if (user != null)
             {

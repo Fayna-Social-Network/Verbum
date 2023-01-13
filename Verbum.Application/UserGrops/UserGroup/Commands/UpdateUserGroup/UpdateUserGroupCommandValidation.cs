@@ -8,7 +8,7 @@ namespace Verbum.Application.UserGrops.UserGroup.Commands.UpdateUserGroup
         {
             RuleFor(c => c.GroupId).NotEqual(Guid.Empty);
             RuleFor(c => c.UserId).NotEqual(Guid.Empty);
-            RuleFor(c => c.isClosed).NotNull();
+            RuleFor(c => c.isClosed).Must(c => c == true || c == false);
             RuleFor(c => c.NewGroupName).NotNull();
         }
     }

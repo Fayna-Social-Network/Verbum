@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
+using Verbum.Domain;
 
 namespace Verbum.Application.Verbum.Repositories
 {
@@ -71,6 +72,19 @@ namespace Verbum.Application.Verbum.Repositories
             }
 
            
+        }
+
+        public bool IsTheUserInGroup(ICollection<VerbumUser> users, Guid UserId) 
+        {
+            foreach(var user in users) 
+            {
+                if (user.Id == UserId) 
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

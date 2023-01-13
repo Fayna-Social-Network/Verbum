@@ -8,9 +8,9 @@ namespace Verbum.Domain.Groups.GroupsVotes
         public string? Text { get; set; }
 
         public Guid GroupMessageId { get; set; }
-        public GroupMessages? groupMessage { get; set; } 
+        public GroupMessage? groupMessage { get; set; } 
 
-        public ICollection<VoteItem>? voteItems { get; set; }
+        public List<VoteItem>? voteItems { get; set; }
 
     }
 }

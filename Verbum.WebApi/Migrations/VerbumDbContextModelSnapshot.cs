@@ -17,7 +17,7 @@ namespace Verbum.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -35,6 +35,21 @@ namespace Verbum.WebApi.Migrations
                     b.HasIndex("verbumUsersId");
 
                     b.ToTable("ContactGroupVerbumUser");
+                });
+
+            modelBuilder.Entity("GroupVerbumUser", b =>
+                {
+                    b.Property<Guid>("groupsid")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("usersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("groupsid", "usersId");
+
+                    b.HasIndex("usersId");
+
+                    b.ToTable("GroupVerbumUser");
                 });
 
             modelBuilder.Entity("HobbyUserDetails", b =>
@@ -88,6 +103,9 @@ namespace Verbum.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("GroupAvatarPath")
+                        .HasColumnType("text");
+
                     b.Property<string>("GroupName")
                         .HasColumnType("text");
 
@@ -102,8 +120,6 @@ namespace Verbum.WebApi.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("groups");
                 });
 
@@ -111,6 +127,9 @@ namespace Verbum.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("GroupMessageCommentId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsRead")
@@ -128,7 +147,12 @@ namespace Verbum.WebApi.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("groupMessageId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupMessageCommentId");
 
                     b.HasIndex("MessageId");
 
@@ -177,6 +201,9 @@ namespace Verbum.WebApi.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("PinnedMessage")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -594,7 +621,7 @@ namespace Verbum.WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e4f2c449-9e88-4317-98db-df2312798dda"),
+                            Id = new Guid("15037253-fe7b-4760-9985-014a9e4fc753"),
                             GroupName = "General"
                         });
                 });
@@ -731,9 +758,6 @@ namespace Verbum.WebApi.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("Groupid")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("HubConnectionId")
                         .HasColumnType("text");
 
@@ -751,8 +775,6 @@ namespace Verbum.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Groupid");
-
                     b.ToTable("Users");
                 });
 
@@ -767,6 +789,21 @@ namespace Verbum.WebApi.Migrations
                     b.HasOne("Verbum.Domain.VerbumUser", null)
                         .WithMany()
                         .HasForeignKey("verbumUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GroupVerbumUser", b =>
+                {
+                    b.HasOne("Verbum.Domain.Group", null)
+                        .WithMany()
+                        .HasForeignKey("groupsid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Verbum.Domain.VerbumUser", null)
+                        .WithMany()
+                        .HasForeignKey("usersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -816,19 +853,12 @@ namespace Verbum.WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Verbum.Domain.Group", b =>
-                {
-                    b.HasOne("Verbum.Domain.VerbumUser", "User")
-                        .WithMany("groups")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Verbum.Domain.Groups.GroupsMessages.GroupMessageComment", b =>
                 {
+                    b.HasOne("Verbum.Domain.Groups.GroupsMessages.GroupMessageComment", null)
+                        .WithMany("groupMessageComments")
+                        .HasForeignKey("GroupMessageCommentId");
+
                     b.HasOne("Verbum.Domain.Groups.GroupsMessages.GroupMessages", "groupMessages")
                         .WithMany("Comments")
                         .HasForeignKey("MessageId")
@@ -1128,18 +1158,9 @@ namespace Verbum.WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Verbum.Domain.VerbumUser", b =>
-                {
-                    b.HasOne("Verbum.Domain.Group", null)
-                        .WithMany("users")
-                        .HasForeignKey("Groupid");
-                });
-
             modelBuilder.Entity("Verbum.Domain.Group", b =>
                 {
                     b.Navigation("groupsThemes");
-
-                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("Verbum.Domain.Groups.GroupsMessages.GroupMessageComment", b =>
@@ -1153,6 +1174,8 @@ namespace Verbum.WebApi.Migrations
                     b.Navigation("MessageReactions");
 
                     b.Navigation("VideoMessage");
+
+                    b.Navigation("groupMessageComments");
                 });
 
             modelBuilder.Entity("Verbum.Domain.Groups.GroupsMessages.GroupMessages", b =>
@@ -1226,8 +1249,6 @@ namespace Verbum.WebApi.Migrations
                     b.Navigation("UserBlackLists");
 
                     b.Navigation("fileMessages");
-
-                    b.Navigation("groups");
 
                     b.Navigation("notifications");
 

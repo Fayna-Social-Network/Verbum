@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace Verbum.Application.UserGrops.UserGroup.Queries.GetAllGroups
 {
-    internal class GetAllGroupsQuery
+    public class GetAllGroupsQuery :IRequest<GetAllGroupsVm>
     {
     }
 }

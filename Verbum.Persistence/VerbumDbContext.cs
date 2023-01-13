@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Domain;
+using Verbum.Domain.Groups;
 using Verbum.Domain.Groups.GroupsMessages;
 using Verbum.Domain.Groups.GroupsVotes;
 using Verbum.Domain.MessagesDb;
@@ -36,9 +37,9 @@ namespace Verbum.Persistence
         public DbSet<StickersGroup> stickersGroups { get; set; } = null!;
 
         public DbSet<Group> groups { get; set; } = null!;
-        public DbSet<GroupMessages> groupMessages { get; set; } = null!;
+        public DbSet<GroupMessage> groupMessages { get; set; } = null!;
         public DbSet<GroupMessageComment> groupMessageComments { get; set; } = null!;
-        public DbSet<GroupsThemes> groupsThemes { get; set; } = null!;
+        public DbSet<GroupThemes> groupsThemes { get; set; } = null!;
         public DbSet<GroupVote> groupVotes { get; set; } = null!;
         public DbSet<VoteItem> voteItems { get; set; } = null!;
 

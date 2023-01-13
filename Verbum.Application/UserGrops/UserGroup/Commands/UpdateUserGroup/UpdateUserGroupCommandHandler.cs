@@ -28,6 +28,7 @@ namespace Verbum.Application.UserGrops.UserGroup.Commands.UpdateUserGroup
 
             group.isGroupClosed = request.isClosed;
             group.GroupName = request.NewGroupName;
+            group.GroupAvatarPath = request.GroupAvatarPath;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

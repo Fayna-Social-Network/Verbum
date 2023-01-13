@@ -18,6 +18,7 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
         public List<UserContactGroups>? contactGroups { get; set; }
         public List<UserStickersGroup>? userStickersGroups { get; set; }
         public List<UserBlackListLoocup>? UserBlackLists { get; set; }
+        public List<Group>? groups { get; set; } 
 
         public void Mapping(Profile profile) {
             profile.CreateMap<VerbumUser, CurrentUserVm>()
@@ -32,7 +33,8 @@ namespace Verbum.Application.Verbum.Users.Queries.GetCurrentUserQuery
                         .ForMember(u => u.UserRegistrationDate, opt => opt.MapFrom(x => x.UserRegistrationDate))
                          .ForMember(u => u.contactGroups, opt => opt.MapFrom(x => x.ContactGroups))
                           .ForMember(u => u.userStickersGroups, opt => opt.MapFrom(x => x.stickersGroups))
-                            .ForMember(u => u.UserBlackLists, opt => opt.MapFrom(x => x.UserBlackLists));
+                            .ForMember(u => u.UserBlackLists, opt => opt.MapFrom(x => x.UserBlackLists))
+                               .ForMember(u => u.groups, opt => opt.MapFrom(x => x.groups));
 
         }
     }

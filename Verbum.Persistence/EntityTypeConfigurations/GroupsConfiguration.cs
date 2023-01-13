@@ -9,10 +9,7 @@ namespace Verbum.Persistence.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.HasOne(a => a.User)
-                .WithMany(d => d.groups)
-                .HasForeignKey(d => d.UserId);
-
+          
         }
     }
 }

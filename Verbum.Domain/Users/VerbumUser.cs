@@ -1,7 +1,7 @@
-﻿using Verbum.Domain.MessagesDb;
-using Verbum.Domain.Stikers;
+﻿using Verbum.Domain.Stikers;
 using Verbum.Domain.Notifications;
 using Verbum.Domain.Users;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Domain
 {
@@ -18,13 +18,12 @@ namespace Verbum.Domain
         public DateTime UserRegistrationDate { get; set; }    
 
         public UserDetails? userDetails { get; set; }
-        public virtual ICollection<UserContact>? Contacts { get; set; }
-        public virtual ICollection<Messages>? Messages { get; set; }
-        public virtual ICollection<UserBlackList>? UserBlackLists { get; set; }
-        public ICollection<ContactGroup>? ContactGroups { get; set; }
-        public ICollection<StickersGroup>? stickersGroups { get; set; }
-        public ICollection<FileMessage>? fileMessages { get; set; }
-        public ICollection<Group>? groups { get; set; }
-        public ICollection<Notification>? notifications { get; set; }
+        public virtual List<UserContact>? Contacts { get; set; }
+        public virtual List<UserBlackList>? UserBlackLists { get; set; }
+        public List<ContactGroup>? ContactGroups { get; set; }
+        public List<StickersGroup>? stickersGroups { get; set; }
+        public List<UserFile>? userFiles { get; set; }
+        public List<Group>? groups { get; set; }
+        public List<Notification>? notifications { get; set; }
     }
 }
