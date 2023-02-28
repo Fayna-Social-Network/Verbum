@@ -18,7 +18,7 @@ namespace Verbum.WebApi.Controllers
         public async Task<ActionResult<Guid>> CreateAudioMessage(AddAudioMessageDto dto) {
             var command = new AddAudioMessageCommand
             {
-                Path = dto.Path,
+                audioFiles = dto.audioFiles,
                 SellerId = UserId,
                 UserId = dto.UserId
             };

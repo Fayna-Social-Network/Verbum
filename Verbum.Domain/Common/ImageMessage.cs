@@ -4,7 +4,7 @@ namespace Verbum.Domain.Common
 {
     public class ImageMessage
     {
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
 

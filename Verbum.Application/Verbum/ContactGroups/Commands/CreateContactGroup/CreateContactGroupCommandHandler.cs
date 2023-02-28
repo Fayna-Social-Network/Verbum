@@ -27,7 +27,7 @@ namespace Verbum.Application.Verbum.ContactGroups.Commands.CreateContactGroup
                 GroupName = request.GroupName
             };
 
-            await _dbContext.contactGroups.AddAsync(contactGroup);
+            await _dbContext.userContactGroups.AddAsync(contactGroup);
 
          
             user.ContactGroups?.Add(contactGroup);

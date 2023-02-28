@@ -1,18 +1,20 @@
 ﻿using Verbum.Application.Common.Mappings;
-using Verbum.Domain.MessagesDb;
 using AutoMapper;
+using Verbum.Domain.ChatOnes;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Application.Verbum.AudioMessages.Queries.GetAudioMessageQuery
 {
-    public class AudioMessageVm :IMapWith<AudioMessage>
+    public class AudioMessageVm :IMapWith<ChatAudioMessage>
     {
         public Guid Id { get; set; }
-        public string? Path { get; set; }
+        public UserFile? PreviewImagePath { get; set; }
+        public List<UserFile>? audioFilePaths { get; set; }
 
         public void Mapping(Profile profile) {
-            profile.CreateMap<AudioMessage, AudioMessageVm>()
+            profile.CreateMap<ChatAudioMessage, AudioMessageVm>()
                 .ForMember(a => a.Id, opt => opt.MapFrom(o => o.Id))
-                .ForMember(a => a.Path, opt => opt.MapFrom(o => o.path));
+                .ForMember(a => a.audioFilePaths, opt => opt.MapFrom(o => o.userFiles));
         }
     }
 }

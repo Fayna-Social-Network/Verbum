@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Verbum.Application.Common.Mappings;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 namespace Verbum.Application.Verbum.Reactions.Queries.GetReactionsQuery
 {
-    public class ReactionLookupDto :IMapWith<MessageReaction>
+    public class ReactionLookupDto :IMapWith<ChatMessageReaction>
     {
         public Guid Id { get; set; }
         public string? ReactionName { get; set; }
@@ -13,7 +13,7 @@ namespace Verbum.Application.Verbum.Reactions.Queries.GetReactionsQuery
         public Guid MessageId { get; set;}
 
         public void Mapping(Profile profile) {
-            profile.CreateMap<MessageReaction, ReactionLookupDto>()
+            profile.CreateMap<ChatMessageReaction, ReactionLookupDto>()
                 .ForMember(r => r.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(r => r.ReactionName, opt => opt.MapFrom(x => x.ReactionName))
                 .ForMember(r => r.UserId, opt => opt.MapFrom(x => x.UserId))

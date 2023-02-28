@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Application.Verbum.ImageMessages.Commands.AddImagesMessageCommand
 {
@@ -15,40 +16,46 @@ namespace Verbum.Application.Verbum.ImageMessages.Commands.AddImagesMessageComma
 
         public async Task<Guid> Handle(AddImagesMessageCommand request, CancellationToken cancellationToken) {
            
-            var message = new Messages
+            var message = new ChatMessage
             {
                 Id = Guid.NewGuid(),
                 Text = "[:image_message:]",
                 Timestamp = DateTime.UtcNow,
                 Seller = request.SellerId,
-                UserId = request.UserId,
+                ChatId = request.ChatId,
                 IsRead = false
             };
 
-            await _verbumHubRepository.NotificateUserForMessage(message);
+            await _verbumHubRepository.NotificateUserForMessage<ChatMessage>(message, request.UserId);
             
-            await _dbContext.Messages.AddAsync(message, cancellationToken);
+            await _dbContext.chatMessages.AddAsync(message, cancellationToken);
 
-            var imageAlbum = new ImageAlbum
+            var imageAlbum = new ChatImageMessage
             {
                 Id = Guid.NewGuid(),
-                Header = request.Header,
+                Title = request.Title,
                 Description = request.Description,
-                MessageId = message.Id
+                ChatMessageId = message.Id
             };
 
-            await _dbContext.ImageAlbums.AddAsync(imageAlbum, cancellationToken);
+            await _dbContext.chatImageMessages.AddAsync(imageAlbum, cancellationToken);
 
-            if (request.DbImagePath != null)
+            if (request.ImagePaths != null)
             {
-                foreach (string path in request.DbImagePath)
+                foreach (string path in request.ImagePaths)
                 {
-                    var imageMessage = new ImageMessage
+                    var imageFile = new UserFile
                     {
+                        Id = Guid.NewGuid(),
+                        Type = "Image",
+                        Name = "image_file",
                         Path = path,
-                        ImageAlbumId = imageAlbum.Id
+                        UserId = request.SellerId
                     };
-                    await _dbContext.Images.AddAsync(imageMessage, cancellationToken);
+
+                    await _dbContext.usersFiles.AddAsync(imageFile, cancellationToken);
+
+                    imageAlbum.userFiles!.Add(imageFile);
                 }
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }

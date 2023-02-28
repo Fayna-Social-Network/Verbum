@@ -20,7 +20,7 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.ChangeContactGroup
                 throw new NotFoundException(nameof(UserContact), request.ContactId);
             }
 
-            var contactGroup = await _dbContext.contactGroups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
+            var contactGroup = await _dbContext.userContactGroups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
 
             if (contactGroup == null) {
                 throw new NotFoundException(nameof(ContactGroup), request.GroupId);

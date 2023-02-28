@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 namespace Verbum.Application.Verbum.Commands.UpdateMessage
 {
@@ -15,12 +15,12 @@ namespace Verbum.Application.Verbum.Commands.UpdateMessage
 
         public async Task<Unit> Handle(UpdateMessageCommand request, CancellationToken cancellationToken) {
             var entity =
-                await _context.Messages.FirstOrDefaultAsync(mess =>
+                await _context.chatMessages.FirstOrDefaultAsync(mess =>
                     mess.Id == request.Id, cancellationToken);
 
             if (entity == null || entity.Seller != request.UserId)
             {
-                throw new NotFoundException(nameof(Messages), request.Id);
+                throw new NotFoundException(nameof(ChatMessage), request.Id);
             }
 
             entity.Text = request.Text;

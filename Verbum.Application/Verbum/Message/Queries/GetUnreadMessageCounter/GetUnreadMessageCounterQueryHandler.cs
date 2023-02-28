@@ -12,8 +12,8 @@ namespace Verbum.Application.Verbum.Message.Queries.GetUnreadMessageCounter
 
         public async Task<int> Handle(GetUnreadMessageCounterQuery request, CancellationToken cancellationToken) {
 
-            var messages = await _dbContext.Messages
-               .Where(m => m.UserId == request.UserId && m.Seller == request.ContactId)
+            var messages = await _dbContext.chatMessages
+               .Where(m => m.ChatId == request.ChatId && m.Seller != request.UserId)
                .ToListAsync();
 
             var UnreadMessages = messages.FindAll(m => m.IsRead == false);

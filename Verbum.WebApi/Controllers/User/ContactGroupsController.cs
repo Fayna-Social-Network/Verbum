@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.ContactGroups.Commands.CreateContactGroup;
 using Verbum.Application.Verbum.ContactGroups.Commands.DeleteContactGroup;
 using Verbum.Application.Verbum.ContactGroups.Commands.UpdateContactGroup;
-using Verbum.Application.Verbum.ContactGroups.Queries.GetIdMainGroup;
 using Verbum.WebApi.Models.contactGroup;
 
 namespace Verbum.WebApi.Controllers
@@ -46,13 +44,7 @@ namespace Verbum.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet("GetIdGeneralGroup")]
-        [Authorize]
-        public async Task<ActionResult<Guid>> GetIdGeneralGroup() {
-            var query = new GetIdMainGroupQuery { };
-            var vm = await Mediator.Send(query);
-            return Ok(vm);
-        }
+ 
 
         [HttpPut]
         [Authorize]

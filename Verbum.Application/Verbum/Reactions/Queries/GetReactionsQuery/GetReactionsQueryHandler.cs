@@ -15,8 +15,8 @@ namespace Verbum.Application.Verbum.Reactions.Queries.GetReactionsQuery
             (_dbContext, _mapper) = (dbContext, mapper);
 
         public async Task<ReactionsVm> Handle(GetReactionsQuery request, CancellationToken cancellationToken) {
-            var query = await (from reactions in _dbContext.MessageReactions
-                               where reactions.MessageId == request.MessageId
+            var query = await (from reactions in _dbContext.chatMessageReactions
+                               where reactions.ChatMessageId == request.MessageId
                                select reactions)
                                .ProjectTo<ReactionLookupDto>(_mapper.ConfigurationProvider)
                                .ToListAsync();

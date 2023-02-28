@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Verbum.Repositories
@@ -16,9 +16,9 @@ namespace Verbum.Application.Verbum.Repositories
         public VerbumHubRepository(IVerbumDbContext verbumDb, IHubContext<VerbumHub> hub) =>
             (_dbContext, _hubContext) = (verbumDb, hub);
 
-        public async Task NotificateUserForMessage(Messages message) {
+        public async Task NotificateUserForMessage<T>(T message, Guid UserId) {
             
-            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == message.UserId);
+            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == UserId);
 
             if (recipient != null)
             {
@@ -32,7 +32,7 @@ namespace Verbum.Application.Verbum.Repositories
             }
         }
 
-        public async Task NotificateUserForMessageIsRead(Messages message) {
+        public async Task NotificateUserForMessageIsRead(ChatMessage message) {
             var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == message.Seller);
 
             if (user != null) {
@@ -44,18 +44,10 @@ namespace Verbum.Application.Verbum.Repositories
             }
         }
 
-        public async Task NotificateUserForMessageIsDelete(Messages message, Guid UserId) {
-            Guid recipientId;
-            if (message.Seller == UserId)
-            {
-                recipientId = message.UserId;
-            }
-            else
-            {
-                recipientId = message.Seller;
-            }
+        public async Task NotificateUserForMessageIsDelete(ChatMessage message, Guid UserId) {
+      
 
-            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == recipientId);
+            var recipient = await _dbContext.Users.SingleOrDefaultAsync(r => r.Id == UserId);
 
             if (recipient != null)
             {

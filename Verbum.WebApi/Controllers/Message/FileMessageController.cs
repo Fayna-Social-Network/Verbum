@@ -19,8 +19,11 @@ namespace Verbum.WebApi.Controllers.Message
 
             var command = new CreateFileMessageCommand
             {
-                Path = dto.Path,
+                Text = dto.Text,
+                Paths = dto.Paths,
                 Type = dto.Type,
+                Description = dto.Description,
+                ChatId = dto.ChatId,
                 Seller = UserId,
                 UserId = dto.UserId
             };

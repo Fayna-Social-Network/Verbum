@@ -1,4 +1,4 @@
-﻿using Verbum.Domain.Groups.GroupsMessages;
+﻿using Verbum.Domain.Groups.GroupChatMessages;
 
 namespace Verbum.Domain.Groups
 {

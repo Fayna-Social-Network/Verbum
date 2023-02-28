@@ -14,7 +14,7 @@ namespace Verbum.Application.Verbum.ContactGroups.Commands.UpdateContactGroup
 
         public async Task<Unit> Handle(UpdateContactGroupCommand request, CancellationToken cancellationToken) {
             
-            var entity = await _dbContext.contactGroups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
+            var entity = await _dbContext.userContactGroups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
 
             if (entity == null) {
                 throw new NotFoundException(nameof(ContactGroup), request.GroupId);

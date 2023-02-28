@@ -21,7 +21,16 @@ namespace Verbum.WebApi.Controllers
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> SendImages(AddImageMessageDto dto) {
-            var command = _mapper.Map<AddImagesMessageCommand>(dto);
+            
+            var command = new AddImagesMessageCommand 
+            {
+                SellerId = UserId,
+                UserId = dto.UserId,
+                ChatId = dto.ChatId,
+                Title = dto.Title,
+                Description = dto.Description,
+                ImagePaths = dto.ImagePaths
+            };
 
             var vm = await Mediator.Send(command);
             return Ok(vm);
@@ -29,7 +38,7 @@ namespace Verbum.WebApi.Controllers
 
         [HttpGet("{messageId}")]
         [Authorize]
-        public async Task<ActionResult<MessageImagesDto>> GetMessageImages(Guid messageId) {
+        public async Task<ActionResult<MessageImagesVm>> GetMessageImages(Guid messageId) {
             var query = new GetMessageImagesQuery
             {
                 MessageId = messageId

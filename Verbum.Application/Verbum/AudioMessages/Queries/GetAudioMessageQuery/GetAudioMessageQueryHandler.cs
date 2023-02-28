@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 namespace Verbum.Application.Verbum.AudioMessages.Queries.GetAudioMessageQuery
 {
@@ -17,11 +17,13 @@ namespace Verbum.Application.Verbum.AudioMessages.Queries.GetAudioMessageQuery
 
 
         public async Task<AudioMessageVm> Handle(GetAudioMessageQuery request, CancellationToken cancellationToken) {
-            var query = await _dbContext.audioMessages.SingleAsync(a => a.MessageId == request.MessageId, cancellationToken);
+            
+            var query = await _dbContext.chatAudioMessages
+                .Include(f => f.userFiles).FirstOrDefaultAsync(a => a.ChatMessageId == request.MessageId);
 
             if (query == null)
             {
-                throw new NotFoundException(nameof(AudioMessage), request.MessageId);
+                throw new NotFoundException(nameof(ChatAudioMessage), request.MessageId);
             }
 
             return _mapper.Map<AudioMessageVm>(query);

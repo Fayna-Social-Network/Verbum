@@ -9,7 +9,7 @@ namespace Verbum.WebApi.Models
         public Guid Id { get; set; }
         public string? Text { get; set; }
         public Guid Seller { get; set; }
-        public Guid UserId { get; set; }
+        public Guid ChatId { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<SendMessageDto, SendMessageCommand>()
@@ -17,7 +17,7 @@ namespace Verbum.WebApi.Models
                 .ForMember(messCommand => messCommand.Text,
                 opt => opt.MapFrom(messDto => messDto.Text))
                 .ForMember(m => m.Seller, opt => opt.MapFrom(m => m.Seller))
-                .ForMember(m => m.UserId, opt => opt.MapFrom(m => m.UserId));
+                .ForMember(m => m.ChatId, opt => opt.MapFrom(m => m.ChatId));
 
         }
     }

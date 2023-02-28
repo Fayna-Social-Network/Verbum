@@ -1,9 +1,8 @@
 ﻿using Verbum.Domain.Common;
-using Verbum.Domain.Groups.GroupChatMessages;
 using Verbum.Domain.Groups.GroupsVotes;
 
 
-namespace Verbum.Domain.Groups.GroupsMessages
+namespace Verbum.Domain.Groups.GroupChatMessages
 {
     public class GroupMessage: Message
     {

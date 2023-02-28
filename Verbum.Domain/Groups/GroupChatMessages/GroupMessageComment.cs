@@ -1,6 +1,6 @@
 ﻿using Verbum.Domain.Common;
 
-namespace Verbum.Domain.Groups.GroupsMessages
+namespace Verbum.Domain.Groups.GroupChatMessages
 {
     public class GroupMessageComment : Message
     {

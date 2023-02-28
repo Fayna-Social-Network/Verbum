@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 namespace Verbum.Application.Verbum.UserFilesAndMessages.Queries.GetFileMessageQuery
 {
@@ -20,11 +20,12 @@ namespace Verbum.Application.Verbum.UserFilesAndMessages.Queries.GetFileMessageQ
 
         public async Task<FileMessageVm> Handle(GetFileMessageQuery request, CancellationToken cancellationToken) {
             
-            var query = await _dbContext.fileMessages.SingleAsync(f => f.MessageId == request.MessageId);
+            var query = await _dbContext.chatFileMessages
+                .Include(f => f.userFiles).FirstOrDefaultAsync(f => f.ChatMessageId == request.MessageId);
 
             if (query == null)
             {
-                throw new NotFoundException(nameof(FileMessage), request.MessageId);
+                throw new NotFoundException(nameof(ChatFileMessage), request.MessageId);
             }
 
             return _mapper.Map<FileMessageVm>(query);

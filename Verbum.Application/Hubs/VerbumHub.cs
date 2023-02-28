@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Hubs.dtos;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Hubs
@@ -52,7 +52,7 @@ namespace Verbum.Application.Hubs
             }
         }
 
-        public async Task SendMessage(Messages message) =>
+        public async Task SendMessage(ChatMessage message) =>
             await Clients.All.SendAsync("receiveMessage", message);
 
 

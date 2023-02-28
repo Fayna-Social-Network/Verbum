@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 #nullable disable
 namespace Verbum.Application.Verbum.Reactions.Commands.AddReaction
@@ -14,35 +14,35 @@ namespace Verbum.Application.Verbum.Reactions.Commands.AddReaction
         public AddReactionCommandHandler(IVerbumDbContext verbumDbContext) => _dbContext = verbumDbContext;
 
         public async Task<Unit> Handle(AddReactionCommand request, CancellationToken cancellationToken) {
-            var message = await _dbContext.Messages.Include(m => m.MessageReactions).FirstOrDefaultAsync(m => m.Id == request.MessageId);
+            var message = await _dbContext.chatMessages.Include(m => m.chatMessageReactions).FirstOrDefaultAsync(m => m.Id == request.MessageId);
             
             if (message == null) { 
-                throw new NotFoundException(nameof(Messages), request.MessageId);
+                throw new NotFoundException(nameof(ChatMessage), request.MessageId);
             }
 
-            var reaction = new MessageReaction
+            var reaction = new ChatMessageReaction
             {
-                MessageId = request.MessageId,
+                ChatMessageId = request.MessageId,
                 ReactionName = request.ReactionName,
                 ReactionCount = 1,
                 UserId = request.UserId
             };
 
-            if (message.MessageReactions?.Count == 0)
+            if (message.chatMessageReactions?.Count == 0)
             {
-                await _dbContext.MessageReactions.AddAsync(reaction, cancellationToken);
+                await _dbContext.chatMessageReactions.AddAsync(reaction, cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
             else {
                 bool add = false;
 
-                foreach (var r in message.MessageReactions) {
+                foreach (var r in message.chatMessageReactions) {
                     if (r.UserId == request.UserId) {
                         throw new IsAlreadyExistsException("This user has already left a reaction");
                     }
 
                     if (r.ReactionName == request.ReactionName) {
-                       var query =  await _dbContext.MessageReactions.FirstOrDefaultAsync(n => n.Id == r.Id, cancellationToken);
+                       var query =  await _dbContext.chatMessageReactions.FirstOrDefaultAsync(n => n.Id == r.Id, cancellationToken);
 
                         if (query != null) {
                             query.ReactionCount = query.ReactionCount + 1;
@@ -53,7 +53,7 @@ namespace Verbum.Application.Verbum.Reactions.Commands.AddReaction
                 }
 
                 if (!add) {
-                    await _dbContext.MessageReactions.AddAsync(reaction, cancellationToken);
+                    await _dbContext.chatMessageReactions.AddAsync(reaction, cancellationToken);
                     await _dbContext.SaveChangesAsync(cancellationToken);
                 }
 

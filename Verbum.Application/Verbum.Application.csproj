@@ -27,6 +27,7 @@
 
   <ItemGroup>
      <Folder Include="UserNotifications\" />
+     <Folder Include="Verbum\ContactGroups\Queries\" />
   </ItemGroup>
 
 </Project>

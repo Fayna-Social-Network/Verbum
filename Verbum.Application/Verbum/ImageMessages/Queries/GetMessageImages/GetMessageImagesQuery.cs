@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Verbum.Domain.MessagesDb;
+
 
 namespace Verbum.Application.Verbum.ImageMessages.Queries.GetMessageImages
 {
-    public class GetMessageImagesQuery :IRequest<ImageAlbum>
+    public class GetMessageImagesQuery :IRequest<MessageImagesVm>
     {
         public Guid MessageId { get; set; }
     }

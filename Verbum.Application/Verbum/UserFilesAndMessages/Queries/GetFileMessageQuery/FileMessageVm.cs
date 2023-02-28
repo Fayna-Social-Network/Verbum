@@ -1,22 +1,23 @@
 ﻿using AutoMapper;
 using Verbum.Application.Common.Mappings;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Application.Verbum.UserFilesAndMessages.Queries.GetFileMessageQuery
 {
-    public class FileMessageVm : IMapWith<FileMessage>
+    public class FileMessageVm : IMapWith<ChatFileMessage>
     {
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public string? Type { get; set; }
-        public string? Path { get; set; }
+        public string? Text { get; set; }
+        public string? Description { get; set; }
+        public List<UserFile>? Files { get; set; } 
 
         public void Mapping(Profile profile) {
-            profile.CreateMap<FileMessage, FileMessageVm>()
+            profile.CreateMap<ChatFileMessage, FileMessageVm>()
                 .ForMember(f => f.Id, opt => opt.MapFrom(o => o.Id))
-                .ForMember(f => f.Name, opt => opt.MapFrom(o => o.Name))
-                .ForMember(f => f.Type, opt => opt.MapFrom(o => o.Type))
-                .ForMember(f => f.Path, opt => opt.MapFrom(o => o.Path));
+                .ForMember(f => f.Text, opt => opt.MapFrom(o => o.Text))
+                .ForMember(f => f.Description, opt => opt.MapFrom(o => o.Description))
+                .ForMember(f => f.Files, opt => opt.MapFrom(o => o.userFiles));
         } 
     }
 }

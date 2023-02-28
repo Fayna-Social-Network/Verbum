@@ -9,6 +9,7 @@ namespace Verbum.Domain.UserFilesTable
         public string? Type { get; set; }
         public string? Name { get; set; }
         public string? Path { get; set; }
+        public string? PreviewImagePath { get; set; } 
 
         public Guid UserId { get; set; }
         public VerbumUser? user { get; set; }

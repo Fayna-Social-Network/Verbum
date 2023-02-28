@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Application.Verbum.UserFilesAndMessages.Commands.CreateFileMessage
 {
@@ -22,29 +23,51 @@ namespace Verbum.Application.Verbum.UserFilesAndMessages.Commands.CreateFileMess
 
             await _commonRepository.IsUserInBlackList(request.UserId, request.Seller);
 
-            var message = new Messages
+            var message = new ChatMessage
             {
                 Id = new Guid(),
                 Text = "[:fileMessage:]",
                 Seller = request.Seller,
                 IsRead = false,
                 Timestamp = DateTime.UtcNow,
-                UserId = request.UserId
+                ChatId = request.UserId
             };
 
-            await _verbumHubRepository.NotificateUserForMessage(message);
+            await _verbumHubRepository.NotificateUserForMessage<ChatMessage>(message, request.UserId);
 
-            await _dbContext.Messages.AddAsync(message, cancellationToken);
+            await _dbContext.chatMessages.AddAsync(message, cancellationToken);
 
-            var fileMessage = new FileMessage
+            var fileMessage = new ChatFileMessage
             {
                 Id = new Guid(),
-                Path = request.Path,
-                Type = request.Type,
-                MessageId = message.Id
+                Text = request.Text,
+                Description = request.Description,
+                ChatMessageId = message.Id
             };
 
-            await _dbContext.fileMessages.AddAsync(fileMessage, cancellationToken);
+            await _dbContext.chatFileMessages.AddAsync(fileMessage);
+
+            if (request.Paths != null) 
+            {
+                foreach (string file in request.Paths)
+                {
+                    var userFile = new UserFile
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = "file",
+                        Name = "file_name",
+                        Path = file,
+                        UserId = request.UserId
+
+                    };
+
+                    await _dbContext.usersFiles.AddAsync(userFile, cancellationToken);
+
+                    fileMessage.userFiles!.Add(userFile);
+                }
+
+            }
+
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return fileMessage.Id;

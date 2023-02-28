@@ -5,8 +5,8 @@ namespace Verbum.Domain.Common
     public class AudioMessage
     {
         public Guid Id { get; set; }
-        public string? PreviewImagePath { get; set; }
-
+       
         public List<UserFile>? userFiles { get; set; }
+       
     }
 }

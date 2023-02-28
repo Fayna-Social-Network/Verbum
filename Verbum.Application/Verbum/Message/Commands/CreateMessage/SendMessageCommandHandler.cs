@@ -1,10 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Verbum.Application.Hubs;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
@@ -24,14 +21,14 @@ namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
         {
             await _commonRepository.IsUserInBlackList(request.UserId, request.Seller);
 
-            var message = new Messages
+            var message = new ChatMessage
             {
                 Id = request.Id,
                 Text = request.Text,
                 Seller = request.Seller,
                 IsRead = false,
                 Timestamp = DateTime.UtcNow,
-                UserId = request.UserId
+                ChatId = request.ChatId
             };
 
             bool isUserInContact = await _commonRepository.IsUserIsFriends(request.UserId, request.Seller);
@@ -54,9 +51,9 @@ namespace Verbum.Application.Verbum.Message.Commands.CreateMessage
                await _dbContext.notifications.AddAsync(notify); 
             }
 
-            await _verbumHubRepository.NotificateUserForMessage(message);
+            await _verbumHubRepository.NotificateUserForMessage<ChatMessage>(message, request.UserId);
 
-            await _dbContext.Messages.AddAsync(message, cancellationToken);
+            await _dbContext.chatMessages.AddAsync(message, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
 

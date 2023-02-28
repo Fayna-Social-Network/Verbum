@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
 using Verbum.Domain;
+using Verbum.Domain.ChatOnes;
 using Verbum.Domain.Notifications;
 
 namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
@@ -21,27 +22,52 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
             await _commonRepository.IsUserInBlackList(request.UserId, request.Contact);
             await _commonRepository.IsUserInBlackList(request.Contact, request.UserId);
 
-            var contactBlackLists = await _dbContext.UserBlackLists.Where(b => b.UserId == request.Contact).ToListAsync();
+            var userContact = await _dbContext.UserContacts.FirstOrDefaultAsync(c => c.Contact == request.UserId && c.UserId == request.Contact);
 
-            if (contactBlackLists != null)
+            Guid userContactId = Guid.NewGuid();
+
+           
+            if(userContact == null) 
             {
-                foreach (var BlackList in contactBlackLists)
+                var chat = new Chat
                 {
-                    if (BlackList.Contact == request.UserId)
-                    {
-                        throw new Exception($"{request.UserId} is blocked by User");
-                    }
-                }
-            }
+                    Id = Guid.NewGuid()
+                };
 
-            var contact = new UserContact
+                var contact = new UserContact
+                {
+                    Id = userContactId,
+                    Contact = request.Contact,
+                    UserId = request.UserId,
+                    Name = request.Name,
+                    GroupId = request.GroupId,
+                    IsMuted = false,
+                    Favorites = false,
+                    ContactBackGroundImage = "",
+                    ChatId = chat.Id
+                };
+
+                await _dbContext.chats.AddAsync(chat, cancellationToken);
+                await _dbContext.UserContacts.AddAsync(contact, cancellationToken);
+
+            } else 
+            
             {
-                Id = Guid.NewGuid(),
-                Contact = request.Contact,
-                UserId = request.UserId,
-                Name = request.Name,
-                GroupId = request.GroupId
-            };
+                var contact = new UserContact
+                {
+                    Id = userContactId,
+                    Contact = request.Contact,
+                    UserId = request.UserId,
+                    Name = request.Name,
+                    GroupId = request.GroupId,
+                    IsMuted = false,
+                    Favorites = false,
+                    ContactBackGroundImage = "",
+                    ChatId = userContact.ChatId
+                };
+
+                await _dbContext.UserContacts.AddAsync(contact, cancellationToken);
+            }
 
             var notify = new Notification
             {
@@ -58,10 +84,9 @@ namespace Verbum.Application.Verbum.UserContacts.Commands.AddContactToUser
             await _verbumHubRepository.SendNotificationToUser(notify);
             await _dbContext.notifications.AddAsync(notify, cancellationToken);
           
-            await _dbContext.UserContacts.AddAsync(contact, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return contact.Id;
+            return userContactId;
         }
     }
 }

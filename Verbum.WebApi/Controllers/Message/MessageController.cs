@@ -2,14 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Verbum.Application.Verbum.Commands.DeleteMessage;
-using Verbum.Application.Verbum.Commands.UpdateMessage;
 using Verbum.Application.Verbum.Message.Commands.CreateMessage;
 using Verbum.Application.Verbum.Message.Commands.SetMessageIsRead;
-using Verbum.Application.Verbum.Message.Queries.GetCorrespondence;
-using Verbum.Application.Verbum.Message.Queries.GetCorrespondenceWithUnknowContact;
-using Verbum.Application.Verbum.Message.Queries.GetMessageById;
+using Verbum.Application.Verbum.Message.Queries.GetChatMessages;
 using Verbum.Application.Verbum.Message.Queries.GetUnreadMessageCounter;
-using Verbum.Domain.MessagesDb;
 using Verbum.WebApi.Models;
 
 namespace Verbum.WebApi.Controllers
@@ -37,32 +33,22 @@ namespace Verbum.WebApi.Controllers
         /// <returns>Returns MessageListVm</returns>
         /// <response code="200">Success</response>
         /// <response code="401">If the user is unauthorized</response>
-        [HttpPost("correspondence")]
+        [HttpGet("chat/{chatId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CorrespondenceVm>> GetCorrespondence([FromBody] GetCorrespondenceDto dto) {
+        public async Task<ActionResult<ChatMessagesVm>> GetChatMessages(Guid chatId) {
             _logger.LogInformation("GetCorrespondences executing...");
-            var query = new GetCorrespondenceQuery
+            var query = new GetChatMessagesQuery
             {
-                Owner = dto.Owner,
-                WithWho = dto.WithWho
+                ChatId = chatId,
+                UserId = UserId
             };
             var vm = await Mediator.Send(query);
             return Ok(vm);
         }
 
-        [HttpGet("correspondence/{userId}")]
-        [Authorize]
-        public async Task<ActionResult<CorrespondenceVm>> GetCorrespondenceWithUnknowContact(Guid userId) {
-            var query = new GetCorrespondenceWithUnknowContactQuery
-            {
-                UserId = userId
-            };
-            var vm = await Mediator.Send(query);
-            return Ok(vm);
-        }
-
+       
         [HttpPut("isRead/{id}")]
         [Authorize]
         public async Task<ActionResult> SetMesssageIsRead(Guid id) {
@@ -100,25 +86,15 @@ namespace Verbum.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<Messages>> GetMessageById(Guid Id) {
-            var query = new GetMessageByIdQuery
-            {
-                MessageId = Id
-            };
+       
 
-            var result = await Mediator.Send(query);
-            return Ok(result);
-        }
-
-        [HttpGet("getCountUnreadMessage/{contactId}")]
+        [HttpGet("getCountUnreadMessage/{chatId}")]
         [Authorize]
-        public async Task<ActionResult<int>> GetUnreadMessageCount(Guid contactId) {
+        public async Task<ActionResult<int>> GetUnreadMessageCount(Guid chatId) {
             
             var query = new GetUnreadMessageCounterQuery {
                 
-                ContactId = contactId,
+                ChatId = chatId,
                 UserId = UserId
             
             };

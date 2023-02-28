@@ -20,10 +20,11 @@ namespace Verbum.WebApi.Controllers.Message
 
             var command = new CreateVideoMessageCommand
             {
-                VideoPath = createVideo.VideoPath,
+                videoFiles = createVideo.videoFiles,
                 Title = createVideo.Title,
                 ContactId = createVideo.ContactId,
-                UserId = UserId
+                UserId = UserId,
+                ChatId = createVideo.ChatId
             };
 
             var vm = await Mediator.Send(command);

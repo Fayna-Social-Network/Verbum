@@ -15,7 +15,7 @@ namespace Verbum.Application.Verbum.ContactGroups.Commands.DeleteContactGroup
 
         public async Task<Unit> Handle(DeleteContactGroupCommand request, CancellationToken cancellationToken) {
             
-            var entity = await _dbContext.contactGroups.FindAsync(new object[] { request.Id }, cancellationToken);
+            var entity = await _dbContext.userContactGroups.FindAsync(new object[] { request.Id }, cancellationToken);
 
             if (entity == null)
             {
@@ -28,7 +28,7 @@ namespace Verbum.Application.Verbum.ContactGroups.Commands.DeleteContactGroup
 
             if (userContacts != null) {
                 
-                var generalGroup = await _dbContext.contactGroups.FirstOrDefaultAsync(g => g.GroupName == "General", cancellationToken);
+                var generalGroup = await _dbContext.userContactGroups.FirstOrDefaultAsync(g => g.GroupName == "General", cancellationToken);
                 
                 if (generalGroup == null) {
                     throw new NotFoundException(nameof(ContactGroup), "General");
@@ -40,7 +40,7 @@ namespace Verbum.Application.Verbum.ContactGroups.Commands.DeleteContactGroup
                 
             }
 
-            _dbContext.contactGroups.Remove(entity);
+            _dbContext.userContactGroups.Remove(entity);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;    

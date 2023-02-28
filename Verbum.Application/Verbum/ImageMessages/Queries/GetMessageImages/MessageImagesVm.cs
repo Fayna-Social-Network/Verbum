@@ -1,19 +1,23 @@
 ﻿using Verbum.Application.Common.Mappings;
-using Verbum.Domain.MessagesDb;
 using AutoMapper;
+using Verbum.Domain.ChatOnes;
+using Verbum.Domain.UserFilesTable;
 
 namespace Verbum.Application.Verbum.ImageMessages.Queries.GetMessageImages
 {
-    public class MessageImagesVm : IMapWith<ImageAlbum>
+    public class MessageImagesVm : IMapWith<ChatImageMessage>
     {
-        public string? Header { get; set; }
+        public Guid Id { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
-        public List<ImageMessageLookupDto>? Images { get; set;}
+        public List<UserFile>? ImagePaths { get; set;}
 
         public void Mapping(Profile profile) {
-            profile.CreateMap<MessageImagesVm, ImageAlbum>()
-                .ForMember(x => x.Header, opt => opt.MapFrom(a => a.Header))
-                .ForMember(x => x.Description, opt => opt.MapFrom(a => a.Description));
+            profile.CreateMap<ChatImageMessage, MessageImagesVm>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(a => a.Id))
+                .ForMember(x => x.Title, opt => opt.MapFrom(a => a.Title))
+                .ForMember(x => x.Description, opt => opt.MapFrom(a => a.Description))
+                .ForMember(x => x.ImagePaths, opt => opt.MapFrom(a => a.userFiles));
                 
         }
     }

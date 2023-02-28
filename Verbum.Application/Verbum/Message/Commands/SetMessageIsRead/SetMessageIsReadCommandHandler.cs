@@ -2,7 +2,7 @@
 using Verbum.Application.Common.Exceptions;
 using Verbum.Application.Interfaces;
 using Verbum.Application.Verbum.Repositories;
-using Verbum.Domain.MessagesDb;
+using Verbum.Domain.ChatOnes;
 
 namespace Verbum.Application.Verbum.Message.Commands.SetMessageIsRead
 {
@@ -18,11 +18,11 @@ namespace Verbum.Application.Verbum.Message.Commands.SetMessageIsRead
 
         public async Task<Unit> Handle(SetMessageIsReadCommand request, CancellationToken cancellationToken) {
             
-            var message = await _dbContext.Messages.FindAsync(new object[] { request.Id }, cancellationToken);
+            var message = await _dbContext.chatMessages.FindAsync(new object[] { request.Id }, cancellationToken);
 
-            if (message == null || message.UserId != request.UserId)
+            if (message == null)
             {
-               throw new NotFoundException(nameof(Messages), request.Id);
+               throw new NotFoundException(nameof(ChatMessage), request.Id);
             }
 
             await _verbumHubRepository.NotificateUserForMessageIsRead(message);
